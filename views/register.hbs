@@ -1,0 +1,79 @@
+<section class="ftco-section">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-12 col-lg-11">
+				<div class="wrap d-md-flex">
+					<div class="text-wrap all-color p-4 p-lg-5 text-center d-flex align-items-center">
+						<div class="text w-100">
+							<p>Bạn đã có tài khoản?</p>
+							<a href="/login" class="btn btn-white btn-outline-white">Đăng nhập</a>
+						</div>
+					</div>
+					<div class="col-lg-9 login-wrap p-4 p-lg-5">
+						<div class="d-flex">
+							<div class="w-100">
+								<h3 class="mb-4">Đăng ký</h3>
+							</div>
+						</div>
+						<form action="#" class="signin-form">
+							<div class="form-group row mb-3">
+								<div class="col-lg-6">
+									<label class="label" for="name">Số điện thoại</label>
+									<input type="text" class="form-control" placeholder="Số điện thoại" required>
+								</div>
+								<div class="col-lg-6">
+									<label class="label" for="name">Email</label>
+									<input type="password" class="form-control" placeholder="Email" required>
+								</div>
+							</div>
+
+							<div class="form-group row mb-3">
+								<div class="col-lg-6">
+									<label class="label" for="name">Họ và tên</label>
+									<input type="text" class="form-control" placeholder="Họ và tên" required>
+								</div>
+								<div class="col-lg-6">
+									<label class="label" for="name">Ngày sinh</label>
+									<input type="date" class="form-control" required>
+								</div>
+							</div>
+
+							<div class="form-group mb-3">
+								<label class="label" for="name">Địa chỉ</label>
+								<input type="text" class="form-control" placeholder="Địa chỉ" required>
+							</div>
+
+							<div class="form-group mb-3">
+								<label class="label" for="name">Hình ảnh mặt trước CCCD</label>
+								<div class="custom-file mb-3">
+									<input type="file" class="custom-file-input" id="customFile" name="filename">
+									<label class="custom-file-label" for="customFile">Choose file</label>
+								</div>
+							</div>
+
+							<div class="form-group mb-3">
+								<label class="label" for="name">Hình ảnh mặt sau CCCD</label>
+								<div class="custom-file mb-3">
+									<input type="file" class="custom-file-input" id="customFile" name="filename">
+									<label class="custom-file-label" for="customFile">Choose file</label>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<button type="submit" class="form-control btn btn-primary submit px-3">Đăng ký</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+</script>
