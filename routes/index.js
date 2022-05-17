@@ -9,6 +9,7 @@ var check = require('../lib/check.js')
 
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
+const { redirect } = require('express/lib/response');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -20,7 +21,7 @@ var transporter = nodemailer.createTransport({
 
 
 /* GET login page. */
-router.get('/login', check.login,function (req, res) {
+router.get('/login', check.login, function (req, res) {
 
   content = {
     title: 'Login',
@@ -30,17 +31,17 @@ router.get('/login', check.login,function (req, res) {
 });
 
 /* POST login page. */
-router.post('/login', function(req,res) {
-  var {username, password} = req.body
+router.post('/login', function (req, res) {
+  var { username, password } = req.body
   var message
-  if(!username)
+  if (!username)
     message = 'Chưa nhập username!'
-  else if(!password)
+  else if (!password)
     message = 'Chưa nhập password!'
-  else if(password.length < 6)
+  else if (password.length < 6)
     message = 'Password ít nhất phải có 6 ký tự!'
 
-  if(message) {
+  if (message) {
     req.session.message = {
       type: 'danger',
       msg: message
@@ -48,10 +49,10 @@ router.post('/login', function(req,res) {
     return res.redirect(303, '/login')
   }
 
-  Account.findOne({username : username}, (err, account) => {
+  Account.findOne({ username: username }, (err, account) => {
     if (err) throw err
 
-    if(!account) {
+    if (!account) {
       req.session.message = {
         type: 'danger',
         msg: 'Tài khoản không tồn tài!'
@@ -59,11 +60,61 @@ router.post('/login', function(req,res) {
       return res.redirect(303, '/login')
     }
 
-    if(bcrypt.compareSync(password, account.password)) {
-      req.session.account = account
-      return res.redirect(303,'/') 
+    /* Khóa tạm thời vĩnh viễn */
+    if (account.lockForever) {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Tài khoản đã bị khóa do nhập sai mật khẩu nhiều lần, vui lòng liên hệ quản trị viên để được hỗ trợ'
+      }
+      return res.redirect(303, '/login')
+    }
+    /* Khóa tạm thời 1 phút */
+    else if (account.lockTime >= new Date()) {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Tài khoản hiện đang bị tạm khóa, vui lòng thử lại sau 1 phút'
+      }
+      return res.redirect(303, '/login')
     }
 
+    /* Kiểm tra đúng mật khẩu */
+    if (bcrypt.compareSync(password, account.password)) {
+      Account.updateOne({ username: username }, {$set: { failTimes: 0}}, (err)=> {
+        if (err) throw err
+      })
+      req.session.account = account
+      return res.redirect(303, '/')  
+    }
+
+    /* Kiểm tra sai mật khẩu của user */
+    if (account.role === 'user') {
+      var update
+      var timeErr = account.failTimes + 1
+
+      switch (timeErr) {
+        case 3:
+          var dt = new Date();
+          dt.setMinutes(dt.getMinutes() + 1);
+          update = {$set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường lúc ' + (new Date())}}
+          break
+        case 6:
+          update = {$set: { failTimes: timeErr, lockForever: true, message: '1 lần đăng nhập bất thường lúc ' + (new Date())}}
+          break
+        default:
+          update = {$set: { failTimes: timeErr }}
+          break
+      }
+
+      Account.updateOne({ username: username }, update, (err)=> {
+        if (err) throw err
+
+        req.session.message = {
+          type: 'danger',
+          msg: 'Sai mật khẩu!'
+        }
+        return res.redirect(303, '/login')
+      })
+    }
     req.session.message = {
       type: 'danger',
       msg: 'Sai mật khẩu!'
@@ -132,16 +183,16 @@ router.post('/register', function (req, res) {
 
         /* Kiểm tra thư mục CCCD */
         var root = __dirname.replace(path.basename(__dirname), '')
-        var dir = path.join(root,'public','images','CCCD')
-        var newFrontCCCD = path.join(dir,'front_'+phone[0]+'.jpg')
-        var newBackCCCD = path.join(dir,'back_'+phone[0]+'.jpg')
+        var dir = path.join(root, 'public', 'images', 'CCCD')
+        var newFrontCCCD = path.join(dir, 'front_' + phone[0] + '.jpg')
+        var newBackCCCD = path.join(dir, 'back_' + phone[0] + '.jpg')
 
-        if(!fs.existsSync(dir))
+        if (!fs.existsSync(dir))
           fs.mkdirSync(dir)
 
         /* Lưu hình ảnh mặt trước CCCD */
         fs.rename(frontCCCD[0].path, newFrontCCCD, (err) => {
-          if(err)
+          if (err)
             console.log(err.message)
           else
             console.log('Lưu hình ảnh mặt trước CCCD thành công!')
@@ -149,7 +200,7 @@ router.post('/register', function (req, res) {
 
         /* Lưu hình ảnh mặt sau CCCD */
         fs.rename(backCCCD[0].path, newBackCCCD, (err) => {
-          if(err)
+          if (err)
             console.log(err.message)
           else
             console.log('Lưu hình ảnh mặt sau CCCD thành công!')
@@ -186,10 +237,11 @@ router.post('/register', function (req, res) {
           address: address[0],
           username: username,
           password: hashpasssword,
-          front_CCCD: path.basename(newFrontCCCD), 
+          lockTime: new Date(),
+          front_CCCD: path.basename(newFrontCCCD),
           back_CCCD: path.basename(newBackCCCD)
         }).save()
-        
+
         /* Tiến hành gửi username và password tới email */
         transporter.sendMail(mailOption, (err, data) => {
           if (err)
@@ -197,12 +249,17 @@ router.post('/register', function (req, res) {
           else
             console.log('Gửi thông tin thành công')
         })
-        res.redirect(303,'/login')
+        res.redirect(303, '/login')
       })
     }
   });
 })
 
+/* GET logout page. */
+router.get('/logout', function (req,res) {
+  req.session.destroy()
+  res.redirect(303,'/login')
+})
 
 
 module.exports = router;

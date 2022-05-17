@@ -14,7 +14,8 @@ const accountSchema = mongoose.Schema({
     changePassword: {type: Boolean, default: true},
     verify: {type: String, default: 'Chờ xác minh'},
     failTimes: {type: Number, default: 0},
-    lockTime: String,
+    lockTime: Date,
+    lockForever: {type: Boolean, default: false},
     message: String,
     money: {type: Number, default: 10000000}
 })
