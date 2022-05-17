@@ -8,6 +8,7 @@ var path = require('path')
 
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
+const { resourceUsage } = require('process');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -18,7 +19,7 @@ var transporter = nodemailer.createTransport({
 });
 
 
-/* GET home page. */
+/* GET login page. */
 router.get('/login', function (req, res) {
 
   content = {
@@ -28,10 +29,50 @@ router.get('/login', function (req, res) {
   res.render('login', content);
 });
 
+/* POST login page. */
 router.post('/login', function(req,res) {
-  
+  var {username, password} = req.body
+  var message
+  if(!username)
+    message = 'Chưa nhập username!'
+  else if(!password)
+    message = 'Chưa nhập password!'
+  else if(password.length < 6)
+    message = 'Password ít nhất phải có 6 ký tự!'
+
+  if(message) {
+    req.session.message = {
+      type: 'danger',
+      msg: message
+    }
+    return res.redirect(303, '/login')
+  }
+
+  Account.findOne({username : username}, (err, account) => {
+    if (err) throw err
+
+    if(!account) {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Tài khoản không tồn tài!'
+      }
+      return res.redirect(303, '/login')
+    }
+
+    if(bcrypt.compareSync(password, account.password)) {
+      req.session.account = account
+      return res.redirect(303,'/') 
+    }
+
+    req.session.message = {
+      type: 'danger',
+      msg: 'Sai mật khẩu!'
+    }
+    res.redirect(303, '/login')
+  })
 })
 
+/* GET register page. */
 router.get('/register', function (req, res) {
 
   content = {
@@ -41,6 +82,7 @@ router.get('/register', function (req, res) {
   res.render('register', content);
 });
 
+/* POST register page. */
 router.post('/register', function (req, res) {
   var form = new multiparty.Form()
   form.parse(req, function (err, fields, files) {
@@ -77,7 +119,7 @@ router.post('/register', function (req, res) {
       return res.redirect(303, '/register')
     }
     else {
-      Account.find({ $or: [{ 'phoneNumber': phone }, { 'email': email }] }, async (err, accounts) => {
+      Account.find({ $or: [{ 'phoneNumber': phone }, { 'email': email }] }, (err, accounts) => {
         if (err) throw err
 
         if (accounts.length) {
@@ -134,8 +176,7 @@ router.post('/register', function (req, res) {
           text: `Username: ${username}\nPassword: ${password}`
         }
 
-        var salt = await bcrypt.genSalt(10);
-        var hashpasssword = await bcrypt.hash(password, salt);
+        var hashpasssword = bcrypt.hashSync(password, 10);
 
         new Account({
           phoneNumber: phone[0],
@@ -161,5 +202,7 @@ router.post('/register', function (req, res) {
     }
   });
 })
+
+
 
 module.exports = router;

@@ -24,11 +24,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'secret'})),
 
-Account.find(async (err, accounts) => {
+Account.find((err, accounts) => {
   if(accounts.length) return
 
-  const salt = await bcrypt.genSalt(10);
-  const hashpasssword = await bcrypt.hash('123456', salt);
+  const hashpasssword = bcrypt.hashSync('123456', 10);
   new Account({
     name: 'Admin',
     username: '0000000000',
