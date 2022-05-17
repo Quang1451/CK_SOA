@@ -5,10 +5,10 @@ var validator = require('email-validator');
 var bcrypt = require('bcrypt');
 var fs = require('fs')
 var path = require('path')
+var check = require('../lib/check.js')
 
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
-const { resourceUsage } = require('process');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -20,7 +20,7 @@ var transporter = nodemailer.createTransport({
 
 
 /* GET login page. */
-router.get('/login', function (req, res) {
+router.get('/login', check.login,function (req, res) {
 
   content = {
     title: 'Login',
@@ -73,7 +73,7 @@ router.post('/login', function(req,res) {
 })
 
 /* GET register page. */
-router.get('/register', function (req, res) {
+router.get('/register', check.login, function (req, res) {
 
   content = {
     title: 'Register',
