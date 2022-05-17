@@ -6,15 +6,17 @@ const accountSchema = mongoose.Schema({
     name: String,
     birthday: Date,
     address: String,
-    avatar: [String],
+    front_CCCD: String,
+    back_CCCD: String,
     username: String,
     password: String,
-    role: String,
-    changePassword: Boolean,
-    verify: String,
-    FailTimes: Number,
+    role: {type: String, default: 'user'},
+    changePassword: {type: Boolean, default: true},
+    verify: {type: String, default: 'Chờ xác minh'},
+    failTimes: {type: Number, default: 0},
     lockTime: String,
     message: String,
+    money: {type: Number, default: 10000000}
 })
 
 const account = mongoose.model('Account', accountSchema)

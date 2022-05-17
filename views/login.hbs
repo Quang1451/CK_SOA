@@ -1,49 +1,61 @@
 <section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-12 col-lg-10">
-					<div class="wrap d-md-flex">
-						<div class="text-wrap all-color p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
-							<div class="text w-100">
-								<h2>Thành viên:</h2>
-                                <p>Hứa Phúc Dũng - 51900043 <br>
-                                    Nguyễn Ngọc Đăng Quang - 51900190 <br>
-									Phạm Ngọc Phụng - 51900178 <br>
-                                    Ngyyễn Minh Trí - 51900251 
-                                </p>
-								<p>Bạn chưa có tài khoản?</p>
-								<a href="/register" class="btn btn-white btn-outline-white">Đăng ký</a>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-12 col-lg-10">
+				<div class="wrap d-md-flex">
+					<div class="text-wrap all-color p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+						<div class="text w-100">
+							<h2>Thành viên:</h2>
+							<p>Hứa Phúc Dũng - 51900043 <br>
+								Nguyễn Ngọc Đăng Quang - 51900190 <br>
+								Phạm Ngọc Phụng - 51900178 <br>
+								Ngyyễn Minh Trí - 51900251
+							</p>
+							<p>Bạn chưa có tài khoản?</p>
+							<a href="/register" class="btn btn-white btn-outline-white">Đăng ký</a>
+						</div>
+					</div>
+					<div class="login-wrap p-4 p-lg-5">
+						<div class="d-flex">
+							<div class="w-100">
+								<h3 class="mb-4">Đăng nhập</h3>
 							</div>
 						</div>
-						<div class="login-wrap p-4 p-lg-5">
-							<div class="d-flex">
-								<div class="w-100">
-									<h3 class="mb-4">Đăng nhập</h3>
+						<form action="#" class="signin-form">
+							<div class="form-group mb-3">
+								<label class="label" for="name">Username</label>
+								<input type="text" class="form-control number-only" placeholder="Username" required>
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="password">Password</label>
+								<input type="password" class="form-control" placeholder="Password" required>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="form-control btn btn-primary submit px-3">Đăng
+									nhập</button>
+							</div>
+							<div class="form-group d-md-flex">
+								<div class="w-50 text-left">
+								</div>
+								<div class="w-50 text-md-right">
+									<a href="#">Quên mật khẩu?</a>
 								</div>
 							</div>
-							<form action="#" class="signin-form">
-								<div class="form-group mb-3">
-									<label class="label" for="name">Username</label>
-									<input type="text" class="form-control" placeholder="Username" required>
-								</div>
-								<div class="form-group mb-3">
-									<label class="label" for="password">Password</label>
-									<input type="password" class="form-control" placeholder="Password" required>
-								</div>
-								<div class="form-group">
-									<button type="submit" class="form-control btn btn-primary submit px-3">Đăng nhập</button>
-								</div>
-								<div class="form-group d-md-flex">
-									<div class="w-50 text-left">
-									</div>
-									<div class="w-50 text-md-right">
-										<a href="#">Quên mật khẩu?</a>
-									</div>
-								</div>
-							</form>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
+
+<script>
+$('.number-only').keyup	(function (event) {
+  if (event.which !== 8 && event.which !== 0 && event.which < 48 || event.which > 57) {
+    // 0 for null value
+    // 8 for backspace
+    // 48-57 for 0-9 numbers
+	this.value = this.value.replace(/\D/g, "");
+  }
+});
+</script>

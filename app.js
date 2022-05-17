@@ -2,7 +2,11 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session')
 var logger = require('morgan');
+var bcrypt = require("bcrypt");
+
+var Account = require('./models/account')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,7 +22,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: 'secret'})),
 
+Account.find(async (err, accounts) => {
+  if(accounts.length) return
+
+  const salt = await bcrypt.genSalt(10);
+  const hashpasssword = await bcrypt.hash('123456', salt);
+  new Account({
+    name: 'Admin',
+    username: '0000000000',
+    password: hashpasssword,
+    role: 'admin',
+    changePassword : false,
+    verify: 'Đã xác minh'
+  }).save();
+})
+
+
+app.use(function(req,res,next) {
+  res.locals.message = req.session.message
+  delete req.session.message
+  next()
+})
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
