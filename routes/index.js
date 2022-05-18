@@ -14,8 +14,8 @@ const Account = require('../models/account.js');
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'huaphucdung2001@gmail.com',
-    pass: '15062001dung',
+    user: 'mywallet141@gmail.com',
+    pass: 'Wallet123',
   }
 });
 
@@ -251,7 +251,7 @@ router.post('/register', function (req, res) {
           var password = randomAccount.createPassword()
 
           let mailOption = {
-            from: 'huaphucdung2001@gmail.com',
+            from: 'mywallet141@gmail.com',
             to: email[0],
             subject: 'Tạo tài khoản ví điện tử',
             text: `Username: ${username}\nPassword: ${password}`
