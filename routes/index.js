@@ -11,6 +11,7 @@ var randomAccount = require('../lib/randomAccount.js')
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
 const { redirect } = require('express/lib/response');
+const { render } = require('../app.js');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -20,13 +21,20 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+router.get('/', function (req,res) {
+
+  content = {
+    layout: 'admin.hbs',
+    title: 'Home',
+  }
+  res.render('index', content)
+})
 
 /* GET login page. */
 router.get('/login', check.login, function (req, res) {
 
   content = {
     title: 'Login',
-    css: 'login.css'
   }
   res.render('login', content);
 });
@@ -131,7 +139,6 @@ router.get('/register', check.login, function (req, res) {
 
   content = {
     title: 'Register',
-    css: 'login.css'
   }
   res.render('register', content);
 });

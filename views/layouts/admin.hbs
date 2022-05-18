@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>{{title}}</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row min-vh-100 flex-column flex-md-row">
+			<aside class="col-12 col-md-2 p-0 all-color flex-shrink-1">
+				<nav class="navbar navbar-expand navbar-dark all-color flex-md-column align-items-start py-2 h-100">
+					<div class="collapse navbar-collapse ">
+						<ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between h-100">
+							<li class="nav-item">
+								<a class="nav-link pl-0 text-nowrap" href="#"><i class="fa fa-wallet fa-fw"></i> <span
+										class="font-weight-bold">MY WALLET</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link pl-0" href="#"><i class="fa fa-user fa-fw"></i> <span
+										class="d-none d-md-inline">Admin</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link pl-0" href="#"><i class="fa fa-address-book fa-fw"></i> <span
+										class="d-none d-md-inline">Quản lý tài khoản</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link pl-0" href="#"><i class="fa fa-sack-dollar fa-fw"></i> <span
+										class="d-none d-md-inline">Quản lý các giao dịch</span></a>
+							</li>
+			
+							<li class="nav-item mt-auto">
+								<a class="nav-link pl-0" href="#"><i class="fa fa-sign-out fa-fw"></i> <span
+										class="d-none d-md-inline">Đăng xuất</span></a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</aside>
+			<main class="col bg-faded py-3 flex-grow-1">
+				{{{body}}}
+			</main>
+		</div>
+	</div>
+</body>
+
+</html>

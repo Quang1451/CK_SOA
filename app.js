@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var logger = require('morgan');
 var bcrypt = require("bcrypt");
-
+var exphbs = require('express-handlebars')
 var Account = require('./models/account')
 
 var indexRouter = require('./routes/index');
@@ -15,7 +15,11 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+
 app.set('view engine', 'hbs');
+app.engine('hbs', exphbs.engine({
+  defaultLayout: 'main.hbs',
+}))
 
 app.use(logger('dev'));
 app.use(express.json());
