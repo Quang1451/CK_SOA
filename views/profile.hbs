@@ -5,12 +5,12 @@
             <div class="wrap p-4 p-lg-5">
                 <div class="form-group row">
                     <h5 class="col-lg-6"><strong>Số điện thoại: </strong>{{phone}}</h5>
-                    <h5><strong>Email: </strong>{{email}}</h5>
+                    <h5 class="col-lg"><strong>Email: </strong>{{email}}</h5>
                 </div>
 
                 <div class="form-group row">
                     <h5 class="col-lg-6"><strong>Họ và tên: </strong>{{name}}</h5>
-                    <h5><strong>Ngày sinh: </strong>{{formatDate birthday}}</h5>
+                    <h5 class="col-lg"><strong>Ngày sinh: </strong>{{formatDate birthday}}</h5>
                 </div>
 
                 <div class="form-group">
@@ -20,6 +20,25 @@
                 <div class="form-group">
                     <h5><strong>Trạng thái: </strong>{{verify}}</h5>
                 </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <h5><strong>Mặt trước CCCD: </strong></h5>
+                        <img src="/images/CCCD/{{frontCCCD}}" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="front-image">
+                    </div>
+                    <div class="col-lg-6">
+                        <h5><strong>Mặt sau CCCD: </strong></h5>
+                        <img src="/images/CCCD/{{backCCCD}}" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="back-image">
+                    </div>
+                </div>
+
+                <div class="text-center text-lg-right">
+                    <button type="button" class="btn btn-primary mr-4">Đổi mật khẩu</button>
+                    <button type="button" class="btn btn-secondary">Đổi hình ảnh CCCD</button>
+                </div>
+
             </div>
         </div>
     </div>
