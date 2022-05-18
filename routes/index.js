@@ -6,6 +6,7 @@ var bcrypt = require('bcrypt');
 var fs = require('fs')
 var path = require('path')
 var check = require('../lib/check.js')
+var randomAccount = require('../lib/randomAccount.js')
 
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
@@ -79,11 +80,11 @@ router.post('/login', function (req, res) {
 
     /* Kiểm tra đúng mật khẩu */
     if (bcrypt.compareSync(password, account.password)) {
-      Account.updateOne({ username: username }, {$set: { failTimes: 0}}, (err)=> {
+      Account.updateOne({ username: username }, { $set: { failTimes: 0 } }, (err) => {
         if (err) throw err
       })
       req.session.account = account
-      return res.redirect(303, '/')  
+      return res.redirect(303, '/')
     }
 
     /* Kiểm tra sai mật khẩu của user */
@@ -95,17 +96,17 @@ router.post('/login', function (req, res) {
         case 3:
           var dt = new Date();
           dt.setMinutes(dt.getMinutes() + 1);
-          update = {$set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường lúc ' + (new Date())}}
+          update = { $set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường lúc ' + (new Date()) } }
           break
         case 6:
-          update = {$set: { failTimes: timeErr, lockForever: true, message: '1 lần đăng nhập bất thường lúc ' + (new Date())}}
+          update = { $set: { failTimes: timeErr, lockForever: true, message: '1 lần đăng nhập bất thường lúc ' + (new Date()) } }
           break
         default:
-          update = {$set: { failTimes: timeErr }}
+          update = { $set: { failTimes: timeErr } }
           break
       }
 
-      Account.updateOne({ username: username }, update, (err)=> {
+      Account.updateOne({ username: username }, update, (err) => {
         if (err) throw err
 
         req.session.message = {
@@ -115,11 +116,13 @@ router.post('/login', function (req, res) {
         return res.redirect(303, '/login')
       })
     }
-    req.session.message = {
-      type: 'danger',
-      msg: 'Sai mật khẩu!'
+    else {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Sai mật khẩu!'
+      }
+      res.redirect(303, '/login')
     }
-    res.redirect(303, '/login')
   })
 })
 
@@ -207,58 +210,51 @@ router.post('/register', function (req, res) {
         })
 
         /* Ngẫu nhiên username */
-        var username = Math.floor(Math.random() * 10000000000).toString()
-        while (username.length < 10) {
-          username = '0' + username;
-        }
+        randomAccount.createUsername((data) => {
+          var username = data
+          /* Ngẫu nhiên password */
+          var password = randomAccount.createPassword()
 
-        /* Ngẫu nhiên password */
-        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        var password = ''
-        for (var i = 0; i < 6; i++) {
-          var rnum = Math.floor(Math.random() * chars.length);
-          password += chars.substring(rnum, rnum + 1);
-        }
+          let mailOption = {
+            from: 'huaphucdung2001@gmail.com',
+            to: email[0],
+            subject: 'Tạo tài khoản ví điện tử',
+            text: `Username: ${username}\nPassword: ${password}`
+          }
 
-        let mailOption = {
-          from: 'huaphucdung2001@gmail.com',
-          to: email[0],
-          subject: 'Tạo tài khoản ví điện tử',
-          text: `Username: ${username}\nPassword: ${password}`
-        }
+          var hashpasssword = bcrypt.hashSync(password, 10);
 
-        var hashpasssword = bcrypt.hashSync(password, 10);
+          new Account({
+            phoneNumber: phone[0],
+            email: email[0],
+            name: name[0],
+            birthday: birthday[0],
+            address: address[0],
+            username: username,
+            password: hashpasssword,
+            lockTime: new Date(),
+            front_CCCD: path.basename(newFrontCCCD),
+            back_CCCD: path.basename(newBackCCCD)
+          }).save()
 
-        new Account({
-          phoneNumber: phone[0],
-          email: email[0],
-          name: name[0],
-          birthday: birthday[0],
-          address: address[0],
-          username: username,
-          password: hashpasssword,
-          lockTime: new Date(),
-          front_CCCD: path.basename(newFrontCCCD),
-          back_CCCD: path.basename(newBackCCCD)
-        }).save()
-
-        /* Tiến hành gửi username và password tới email */
-        transporter.sendMail(mailOption, (err, data) => {
-          if (err)
-            console.log(err.message)
-          else
-            console.log('Gửi thông tin thành công')
+          /* Tiến hành gửi username và password tới email */
+          transporter.sendMail(mailOption, (err, data) => {
+            if (err)
+              console.log(err.message)
+            else
+              console.log('Gửi thông tin thành công')
+          })
+          res.redirect(303, '/login')
         })
-        res.redirect(303, '/login')
       })
     }
   });
 })
 
 /* GET logout page. */
-router.get('/logout', function (req,res) {
+router.get('/logout', function (req, res) {
   req.session.destroy()
-  res.redirect(303,'/login')
+  res.redirect(303, '/login')
 })
 
 
