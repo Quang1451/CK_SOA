@@ -10,8 +10,6 @@ var randomAccount = require('../lib/randomAccount.js')
 
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
-const { redirect } = require('express/lib/response');
-const { render } = require('../app.js');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -21,11 +19,19 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-router.get('/', function (req,res) {
+router.get('/', check.notLogin, function (req,res) {
+  var account = req.session.account
+  var role = account.role
+  var page = 'user.hbs'
+  
+  /* Kiểm tra quyển hạng để hiện layout tương ứng */
+  if(role == 'admin') 
+    page = 'admin.hbs'
 
   content = {
-    layout: 'admin.hbs',
+    layout: page,
     title: 'Home',
+    name: account.name
   }
   res.render('index', content)
 })
