@@ -19,21 +19,43 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+/* GET home page. */
 router.get('/', check.notLogin, function (req,res) {
   var account = req.session.account
   var role = account.role
-  var page = 'user.hbs'
   
-  /* Kiểm tra quyển hạng để hiện layout tương ứng */
-  if(role == 'admin') 
-    page = 'admin.hbs'
-
   content = {
-    layout: page,
+    layout: check.getLayout(role),
     title: 'Home',
-    name: account.name
   }
   res.render('index', content)
+})
+
+/* GET profile page. */
+router.get('/profile/:id', check.notLogin, function (req,res) {
+  var id = req.params.id
+
+  var account = req.session.account
+  var role = account.role
+  /* Tìm kiểm bởi id trong mongodb */
+  Account.findOne({_id: id}, function(err ,profile) {
+    if(profile === undefined)
+      return res.redirect(303,'/')
+
+    content = {
+      layout: check.getLayout(role),
+      title: 'Profile',
+      name: profile.name,
+      phone: profile.phoneNumber,
+      email: profile.email,
+      address: profile.address,
+      birthday: profile.birthday,
+      verify: profile.verify,
+      backCCCD : profile.back_CCCD,
+      frontCCCD: profile.front_CCCD
+    }
+    res.render('profile',content)
+  })
 })
 
 /* GET login page. */

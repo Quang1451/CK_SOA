@@ -19,6 +19,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs', exphbs.engine({
   defaultLayout: 'main.hbs',
+  helpers: {
+    /* Format thời gian thành day/month/year */
+    formatDate: function (dateObj) {
+      var month = dateObj.getUTCMonth() + 1; //months from 1-12
+      var day = dateObj.getUTCDate();
+      var year = dateObj.getUTCFullYear();
+      return day + "/" + month + "/" + year;
+    }
+  }
 }))
 
 app.use(logger('dev'));
@@ -26,24 +35,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: 'secret'})),
+app.use(session({ secret: 'secret' })),
 
-Account.find((err, accounts) => {
-  if(accounts.length) return
+  Account.find((err, accounts) => {
+    if (accounts.length) return
 
-  const hashpasssword = bcrypt.hashSync('123456', 10);
-  new Account({
-    name: 'Admin',
-    username: '0000000000',
-    password: hashpasssword,
-    role: 'admin',
-    changePassword : false,
-    verify: 'Đã xác minh'
-  }).save();
-})
+    const hashpasssword = bcrypt.hashSync('123456', 10);
+    new Account({
+      name: 'Admin',
+      username: '0000000000',
+      password: hashpasssword,
+      role: 'admin',
+      changePassword: false,
+      verify: 'Đã xác minh'
+    }).save();
+  })
 
 
-app.use(function(req,res,next) {
+app.use(function (req, res, next) {
+  res.locals.account = req.session.account
   res.locals.message = req.session.message
   delete req.session.message
   next()
@@ -52,12 +62,12 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
