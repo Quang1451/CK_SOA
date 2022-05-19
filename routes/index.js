@@ -12,15 +12,26 @@ const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
 
 var transporter = nodemailer.createTransport({
+  /* host: 'mail.phongdaotao.com',
+  port: 25,
+  secure: false,
+  auth: {
+    user: 'sinhvien@phongdaotao.com',
+    pass: 'svtdtu',
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false
+  }, */
   service: 'gmail',
   auth: {
     user: 'mywallet141@gmail.com',
     pass: 'Wallet123',
-  }
+  },
 });
 
 /* GET home page. */
-router.get('/', check.notLogin, function (req,res) {
+router.get('/', check.notLogin, check.firstLogin,function (req,res) {
   var account = req.session.account
   var role = account.role
   
@@ -31,8 +42,64 @@ router.get('/', check.notLogin, function (req,res) {
   res.render('index', content)
 })
 
+/* GET first login page */
+router.get('/firstLogin', check.notLogin, function (req,res) {
+  content = {
+    title: 'Đăng nhập lần đầu tiên',
+  }
+  res.render('firstLogin', content);
+})
+
+/* POST first login page */
+router.post('/firstLogin', check.notLogin, function (req,res) {
+  var account = req.session.account
+  var id = account._id
+  var {newPass, reNewPass} = req.body
+  console.log(req.body)
+  var message
+  if (!newPass)
+    message = 'Chưa nhập mật khẩu mới!'
+  else if (newPass.length < 6)
+    message = 'Mật khẩu ít hơn 6 ký tự!'
+  else if (!reNewPass)
+    message = 'Chưa nhập xác nhận mật khẩu!'
+  else if (reNewPass != newPass)
+    message = 'Mật khẩu nhập lại không đúng!'
+
+  if (message) {
+    req.session.message = {
+      type: 'danger',
+      msg: message
+    }
+    return res.redirect(303, '/firstLogin')
+  }
+
+  var hashpasssword = bcrypt.hashSync(newPass, 10);
+
+  Account.updateOne({_id: id}, { $set: { password: hashpasssword, changePassword: false } }, (err, accounts) => {
+    if (err) throw err
+
+    account.changePassword = false
+    req.session.account = account
+
+    res.redirect(303,'/')
+  })
+})
+
+/* GET change password page */
+router.get('/changePassword', check.notLogin, check.firstLogin, function (req,res) {
+  var account = req.session.account
+  var role = account.role
+  
+  content = {
+    layout: check.getLayout(role),
+    title: 'Change Password',
+  }
+  res.render('changePassword', content)
+})
+
 /* GET profile page. */
-router.get('/profile/:id', check.notLogin, function (req,res) {
+router.get('/profile/:id', check.notLogin, check.firstLogin,function (req,res) {
   var id = req.params.id
 
   var account = req.session.account
@@ -251,7 +318,7 @@ router.post('/register', function (req, res) {
           var password = randomAccount.createPassword()
 
           let mailOption = {
-            from: 'mywallet141@gmail.com',
+            from: 'mywallet141@gmail.com', /* 'sinhvien@phongdaotao.com' */
             to: email[0],
             subject: 'Tạo tài khoản ví điện tử',
             text: `Username: ${username}\nPassword: ${password}`

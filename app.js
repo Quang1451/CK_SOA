@@ -42,6 +42,9 @@ app.use(session({ secret: 'secret' })),
 
     const hashpasssword = bcrypt.hashSync('123456', 10);
     new Account({
+      phonneNumber: '0000000000',
+      email: 'admin@gmail.com',
+      birthday: new Date(),
       name: 'Admin',
       username: '0000000000',
       password: hashpasssword,
