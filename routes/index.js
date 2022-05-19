@@ -167,7 +167,8 @@ router.get('/profile/:id', check.notLogin, check.firstLogin, function (req, res)
       birthday: profile.birthday,
       verify: profile.verify,
       backCCCD: profile.back_CCCD,
-      frontCCCD: profile.front_CCCD
+      frontCCCD: profile.front_CCCD,
+      money: profile.money
     }
     res.render('profile', content)
   })

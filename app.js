@@ -26,6 +26,12 @@ app.engine('hbs', exphbs.engine({
       var day = dateObj.getUTCDate();
       var year = dateObj.getUTCFullYear();
       return day + "/" + month + "/" + year;
+    },
+
+    formatMoney: function(money) {
+      money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
+      money = money.replaceAll('.',',')
+      return money.replace('VND','đ')
     }
   }
 }))
