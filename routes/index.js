@@ -31,10 +31,10 @@ var transporter = nodemailer.createTransport({
 });
 
 /* GET home page. */
-router.get('/', check.notLogin, check.firstLogin,function (req,res) {
+router.get('/', check.notLogin, check.firstLogin, function (req, res) {
   var account = req.session.account
   var role = account.role
-  
+
   content = {
     layout: check.getLayout(role),
     title: 'Home',
@@ -43,7 +43,7 @@ router.get('/', check.notLogin, check.firstLogin,function (req,res) {
 })
 
 /* GET first login page */
-router.get('/firstLogin', check.notLogin, function (req,res) {
+router.get('/firstLogin', check.notLogin, function (req, res) {
   content = {
     title: 'Đăng nhập lần đầu tiên',
   }
@@ -51,10 +51,10 @@ router.get('/firstLogin', check.notLogin, function (req,res) {
 })
 
 /* POST first login page */
-router.post('/firstLogin', check.notLogin, function (req,res) {
+router.post('/firstLogin', check.notLogin, function (req, res) {
   var account = req.session.account
   var id = account._id
-  var {newPass, reNewPass} = req.body
+  var { newPass, reNewPass } = req.body
 
   var message
   if (!newPass)
@@ -76,21 +76,21 @@ router.post('/firstLogin', check.notLogin, function (req,res) {
 
   var hashpasssword = bcrypt.hashSync(newPass, 10);
 
-  Account.updateOne({_id: id}, { $set: { password: hashpasssword, changePassword: false } }, (err, accounts) => {
+  Account.updateOne({ _id: id }, { $set: { password: hashpasssword, changePassword: false } }, (err, accounts) => {
     if (err) throw err
 
     account.changePassword = false
     req.session.account = account
 
-    res.redirect(303,'/')
+    res.redirect(303, '/')
   })
 })
 
 /* GET change password page */
-router.get('/changePassword', check.notLogin, check.firstLogin, function (req,res) {
+router.get('/changePassword', check.notLogin, check.firstLogin, function (req, res) {
   var account = req.session.account
   var role = account.role
-  
+
   content = {
     layout: check.getLayout(role),
     title: 'Change Password',
@@ -99,18 +99,18 @@ router.get('/changePassword', check.notLogin, check.firstLogin, function (req,re
 })
 
 /* POST change password page */
-router.post('/changePassword', function (req,res) {
+router.post('/changePassword', function (req, res) {
   var account = req.session.account
   var id = account._id
 
-  var {oldPass, newPass, reNewPass} = req.body
+  var { oldPass, newPass, reNewPass } = req.body
 
   var message
   if (!oldPass)
     message = 'Chưa nhập mật khẩu cũ!'
   else if (!newPass)
     message = 'Chưa nhập mật khẩu mới!'
-  else  if (!reNewPass)
+  else if (!reNewPass)
     message = 'Chưa nhập xác nhận!'
   else if (newPass.length < 6)
     message = 'Mật khẩu ít hơn 6 ký tự!'
@@ -125,10 +125,10 @@ router.post('/changePassword', function (req,res) {
     return res.redirect(303, '/changePassword')
   }
 
-  Account.findOne({_id:id}, (err, result) => {
-    if(err) throw err
+  Account.findOne({ _id: id }, (err, result) => {
+    if (err) throw err
 
-    if(!bcrypt.compareSync(oldPass, result.password)) {
+    if (!bcrypt.compareSync(oldPass, result.password)) {
       req.session.message = {
         type: 'danger',
         msg: 'Mật khẩu cũ không chính xác'
@@ -139,23 +139,23 @@ router.post('/changePassword', function (req,res) {
 
   var hashpasssword = bcrypt.hashSync(newPass, 10);
 
-  Account.updateOne({_id: id}, { $set: { password: hashpasssword} }, (err, accounts) => {
+  Account.updateOne({ _id: id }, { $set: { password: hashpasssword } }, (err, accounts) => {
     if (err) throw err
 
-    res.redirect(303,'/')
+    res.redirect(303, '/')
   })
 })
 
 /* GET profile page. */
-router.get('/profile/:id', check.notLogin, check.firstLogin,function (req,res) {
+router.get('/profile/:id', check.notLogin, check.firstLogin, function (req, res) {
   var id = req.params.id
 
   var account = req.session.account
   var role = account.role
   /* Tìm kiểm bởi id trong mongodb */
-  Account.findOne({_id: id}, function(err ,profile) {
-    if(profile === undefined)
-      return res.redirect(303,'/')
+  Account.findOne({ _id: id }, function (err, profile) {
+    if (profile === undefined)
+      return res.redirect(303, '/')
 
     content = {
       layout: check.getLayout(role),
@@ -166,10 +166,78 @@ router.get('/profile/:id', check.notLogin, check.firstLogin,function (req,res) {
       address: profile.address,
       birthday: profile.birthday,
       verify: profile.verify,
-      backCCCD : profile.back_CCCD,
+      backCCCD: profile.back_CCCD,
       frontCCCD: profile.front_CCCD
     }
-    res.render('profile',content)
+    res.render('profile', content)
+  })
+})
+
+/* GET update CCCD page */
+router.get('/updateCCCD', check.notLogin, check.firstLogin, function (req, res) {
+  var account = req.session.account
+  var role = account.role
+
+  content = {
+    layout: check.getLayout(role),
+    title: 'Thay đổi CCCD',
+  }
+  res.render('updateCCCD', content)
+})
+
+/* POST update CCCD page */
+router.post('/updateCCCD', function (req, res) {
+  var account = req.session.account
+  var form = new multiparty.Form()
+  form.parse(req, function (err, fields, files) {
+    if (err) throw err
+
+    var front_CCCD = files.frontCCCD[0]
+    var back_CCCD = files.backCCCD[0]
+
+    var message
+    if (!front_CCCD)
+      message = 'Thiếu hình ảnh mặt trước CCCD'
+    else if (!back_CCCD)
+      message = 'Thiếu hình ảnh mặt trước CCCD'
+
+    if (message) {
+      req.session.message = {
+        type: 'danger',
+        msg: message
+      }
+      return res.redirect(303, '/updateCCCD')
+    }
+
+    var root = __dirname.replace(path.basename(__dirname), '')
+    var dir = path.join(root, 'public', 'images', 'CCCD')
+    var newFrontCCCD = path.join(dir, 'front_' + account.phoneNumber + '.jpg')
+    var newBackCCCD = path.join(dir, 'back_' + account.phoneNumber + '.jpg')
+
+    console.log(dir)
+    console.log(newFrontCCCD)
+    console.log(newBackCCCD)
+
+    if (!fs.existsSync(dir))
+      fs.mkdirSync(dir)
+
+    /* Lưu hình ảnh mặt trước CCCD */
+    fs.rename(front_CCCD.path, newFrontCCCD, (err) => {
+      if (err)
+        console.log(err.message)
+      else
+        console.log('Lưu hình ảnh mặt trước CCCD thành công!')
+    })
+
+    /* Lưu hình ảnh mặt sau CCCD */
+    fs.rename(back_CCCD.path, newBackCCCD, (err) => {
+      if (err)
+        console.log(err.message)
+      else
+        console.log('Lưu hình ảnh mặt sau CCCD thành công!')
+    })
+
+    res.redirect(303,'/')
   })
 })
 
