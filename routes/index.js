@@ -55,14 +55,14 @@ router.post('/firstLogin', check.notLogin, function (req,res) {
   var account = req.session.account
   var id = account._id
   var {newPass, reNewPass} = req.body
-  console.log(req.body)
+
   var message
   if (!newPass)
     message = 'Chưa nhập mật khẩu mới!'
-  else if (newPass.length < 6)
-    message = 'Mật khẩu ít hơn 6 ký tự!'
   else if (!reNewPass)
     message = 'Chưa nhập xác nhận mật khẩu!'
+  else if (newPass.length < 6)
+    message = 'Mật khẩu ít hơn 6 ký tự!'
   else if (reNewPass != newPass)
     message = 'Mật khẩu nhập lại không đúng!'
 
@@ -96,6 +96,54 @@ router.get('/changePassword', check.notLogin, check.firstLogin, function (req,re
     title: 'Change Password',
   }
   res.render('changePassword', content)
+})
+
+/* POST change password page */
+router.post('/changePassword', function (req,res) {
+  var account = req.session.account
+  var id = account._id
+
+  var {oldPass, newPass, reNewPass} = req.body
+
+  var message
+  if (!oldPass)
+    message = 'Chưa nhập mật khẩu cũ!'
+  else if (!newPass)
+    message = 'Chưa nhập mật khẩu mới!'
+  else  if (!reNewPass)
+    message = 'Chưa nhập xác nhận!'
+  else if (newPass.length < 6)
+    message = 'Mật khẩu ít hơn 6 ký tự!'
+  else if (reNewPass != newPass)
+    message = 'Mật khẩu nhập lại không đúng!'
+
+  if (message) {
+    req.session.message = {
+      type: 'danger',
+      msg: message
+    }
+    return res.redirect(303, '/changePassword')
+  }
+
+  Account.findOne({_id:id}, (err, result) => {
+    if(err) throw err
+
+    if(!bcrypt.compareSync(oldPass, result.password)) {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Mật khẩu cũ không chính xác'
+      }
+      return res.redirect(303, '/changePassword')
+    }
+  })
+
+  var hashpasssword = bcrypt.hashSync(newPass, 10);
+
+  Account.updateOne({_id: id}, { $set: { password: hashpasssword} }, (err, accounts) => {
+    if (err) throw err
+
+    res.redirect(303,'/')
+  })
 })
 
 /* GET profile page. */
