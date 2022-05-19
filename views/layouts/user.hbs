@@ -8,6 +8,16 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
 		integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -27,23 +37,23 @@
 										class="d-none d-md-inline">{{account.name}}</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0" href="#"><i class="fa fa-cart-shopping fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-cart-shopping fa-fw"></i> <span
 										class="d-none d-md-inline">Mua thẻ</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0" href="#"><i class="fa fa-piggy-bank fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-piggy-bank fa-fw"></i> <span
 										class="d-none d-md-inline">Nạp tiền</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0" href="#"><i class="fa fa-money-bill-wave fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-money-bill-wave fa-fw"></i> <span
 										class="d-none d-md-inline">Rút tiền</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0" href="#"><i class="fa fa-money-bill-transfer fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-money-bill-transfer fa-fw"></i> <span
 										class="d-none d-md-inline">Chuyển tiền</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0" href="#"><i class="fa fa-receipt fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-receipt fa-fw"></i> <span
 										class="d-none d-md-inline">Lịch sử giao dịch</span></a>
 							</li>
 
@@ -60,6 +70,28 @@
 			</main>
 		</div>
 	</div>
+
+	<!-- The note modal -->
+	<div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalLabel">Lưu ý</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					Tính năng này chỉ dành cho các tài khoản đã được xác minh!
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 <script src="/javascripts/main.js"></script>
+
 </html>

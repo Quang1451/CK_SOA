@@ -32,6 +32,12 @@ app.engine('hbs', exphbs.engine({
       money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
       money = money.replaceAll('.',',')
       return money.replace('VND','đ')
+    },
+
+    verifyAccount: function(verify) {
+      if(verify == 'Đã xác minh')
+        return
+      return 'verify'
     }
   }
 }))
