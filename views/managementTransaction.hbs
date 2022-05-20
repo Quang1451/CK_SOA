@@ -1,0 +1,156 @@
+<div class="container">
+    <h1 class="mb-4">Quản lý các giao dịch</h1>
+    <div class="row flex-column flex-md-row">
+        <aside class="col-12 List_Transaction">
+            <div class="wrap p-4 p-lg-5">
+                <div class="Table_Transaction">
+                    <div class="table-responsive">
+                        <table class="table custom-table table-hover">
+                            <thead class="all-color">
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Mã tài khoản</th>
+                                    <th scope="col">Họ tên</th>
+                                    <th scope="col">Số tiền giao dịch</th>
+                                    <th scope="col">Hình thức</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Thời gian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="transfer">
+                                    <td>1</td>
+                                    <td>000000000</td>
+                                    <td>Nguyen Van A</td>
+                                    <td>5,000,000 VND</td>
+                                    <td>chuyển tiền</td>
+                                    <td><span class="no">Chưa duyệt</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+                                <tr class="withdraw">
+                                    <td>2</td>
+                                    <td>000000000</td>
+                                    <td>Nguyen Van A</td>
+                                    <td>5,000,000 VND</td>
+                                    <td>rút tiền</td>
+                                    <td><span class="no">Chưa duyệt</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+                                <tr class="transfer">
+                                    <td>3</td>
+                                    <td>000000000</td>
+                                    <td>Nguyen Van A</td>
+                                    <td>5,000,000 VND</td>
+                                    <td>chuyển tiền</td>
+                                    <td><span class="no">Chưa duyệt</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+                                <tr class="withdraw">
+                                    <td>4</td>
+                                    <td>000000000</td>
+                                    <td>Nguyen Van A</td>
+                                    <td>5,000,000 VND</td>
+                                    <td>rút tiền</td>
+                                    <td><span class="no">Chưa duyệt</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<!-- Transfer money dialog -->
+<div class="modal fade" id="confirm-transfer">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Phê duyệt chuyển tiền </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Tài khoản gửi: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Người gửi: </strong>Nguyễn Văn A</p>
+                </div>
+
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Tài khoản nhận: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Người nhận: </strong>Nguyễn Văn A</p>
+                </div>
+                
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền: </strong>5,000,000đ</p>
+                    <p class="col-md-6"><strong>Thời gian: </strong>9/05/2002</p>
+                </div>
+
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-primary">Đang chờ duyệt</span></p>
+                </div>
+                
+                <div class="form-group mb-0">
+                    <p><strong>Nội dung:
+                        </strong>ldfhodsjflkjflksjlfkdsjlflfsalfkdlflsflslfdajlfslfdajflsafjldsfjldsafjasfdj</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Duyệt</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Từ chối</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Withdraw modny dialog -->
+<div class="modal fade" id="confirm-withdraw">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Phê duyệt rút tiền</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
+                </div>
+
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số thẻ: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Ngày hết hạn: </strong>Nguyễn Văn A</p>
+                </div>
+
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Mã CVV: </strong>411</p>
+                    <p class="col-md-6"><strong>Thời gian: </strong></p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền: </strong>50,00đ</p>
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-primary">Đang chờ duyệt</span></p>
+                </div>
+                <div class="form-group mb-0">
+                    <p><strong>Ghi chú:
+                        </strong>ldfhodsjflkjflksjlfkdsjlflfsalfkdlflsflslfdajlfslfdajflsafjldsfjldsafjasfdj</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Duyệt</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Từ chối</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/javascripts/management.js"></script>

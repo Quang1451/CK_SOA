@@ -18,5 +18,15 @@ $(document).ready(() => {
     /* Hiện dialog xem thông tin tài khoản bị vô hiệu hóa */
     $('.canceled').on('click', ()=> {
         $('#confirm-Information-disable').modal('show')
-    })  
+    })
+    
+    /* Hiện dialog xem thông tin chuyển tiền */
+    $('.transfer').on('click', ()=> {
+        $('#confirm-transfer').modal('show')
+    }) 
+
+    /* Hiện dialog xem thông tin rút tiền */
+    $('.withdraw').on('click', ()=> {
+        $('#confirm-withdraw').modal('show')
+    }) 
 })
