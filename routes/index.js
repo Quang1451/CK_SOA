@@ -25,8 +25,8 @@ var transporter = nodemailer.createTransport({
   }, */
   service: 'gmail',
   auth: {
-    user: 'mywallet141@gmail.com',
-    pass: 'Wallet123',
+    user: 'huaphucdung2001@gmail.com',
+    pass: '15062001dung',
   },
 });
 
@@ -435,7 +435,7 @@ router.post('/register', function (req, res) {
           var password = randomAccount.createPassword()
 
           let mailOption = {
-            from: 'mywallet141@gmail.com', /* 'sinhvien@phongdaotao.com' */
+            from: 'huaphucdung2001@gmail.com', /* 'sinhvien@phongdaotao.com' */
             to: email[0],
             subject: 'Tạo tài khoản ví điện tử',
             text: `Username: ${username}\nPassword: ${password}`

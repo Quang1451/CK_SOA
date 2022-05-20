@@ -1,0 +1,293 @@
+<div class="container">
+    <h1 class="mb-4">Quản lý tài khoản</h1>
+    <div class="row min-vh-100 flex-column flex-md-row">
+        <aside class="col-12">
+            <div class="wrap p-4 p-lg-5">
+                <div class="item-search">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label for="status" class="input-group-text">Trạng thái:</label>
+                        </div>
+                        <select id="status" name="status" class="custom-select col-12 col-md-4">
+                            <option value="tk_All"> --- Tất cả ---</option>
+                            <option value="tk_ChoKichHoat">Tài khoản chờ kích hoạt</option>
+                            <option value="tk_DaKichHoat">Tài khoản đã kích hoạt</option>
+                            <option value="tk_DaVoHieuHoa">Tài khoản đã vô hiệu hóa</option>
+                            <option value="tk_DangBiKhoa">Tài khoản đang bị khóa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="Table_User">
+                    <div class="table-responsive">
+                        <table class="table custom-table table-hover">
+                            <thead class="all-color">
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Mã tài khoản</th>
+                                    <th scope="col">Họ và tên</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Ngày tạo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="activated">
+                                    <td>1</td>
+                                    <td>Minh Thư</td>
+                                    <td>minhthu@p.gmail.com</td>
+                                    <td><span class="yes">Đã kích hoạt</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+                                <tr class="locked">
+                                    <td>2</td>
+                                    <td>Minh Thư</td>
+                                    <td>minhthu@p.gmail.com</td>
+                                    <td><span class="block">Đang bị khóa</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+                                <tr class="wait">
+                                    <td>3</td>
+                                    <td>Minh Thư</td>
+                                    <td>minhthu@p.gmail.com</td>
+                                    <td><span class="no">Chờ kích hoạt</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+                                <tr class="canceled">
+                                    <td>4</td>
+                                    <td>Minh Thư</td>
+                                    <td>minhthu@p.gmail.com</td>
+                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
+                                    <td>21/12/2019</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<!-- Information-activated dialog -->
+<div class="modal fade" id="confirm-Information-activated">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Đã kích hoạt</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số điện thoại: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Email: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Ngày sinh: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Ngày tạo: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group mb-0">
+                    <p><strong>Địa chỉ: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền hiện tại: </strong>5,000,000 đ</p>
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-success">Đã kích hoạt</span></p>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-6">
+                        <p><strong>Mặt trước CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="front-image">
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mặt sau CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="back-image">
+                    </div>
+                </div>
+                <p><span class="text-danger">Hiển thị lịch sử giao dịch trong tháng hiện hành, mới nhất trước.</span></p>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Tài khoản: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Tên người nhận: </strong>Nguyễn Văn A</p>
+                </div>
+                
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Thời gian: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group mb-0">
+                    <p><strong>Nội dung: </strong>Gui tien viet web cuoi ky</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Information-wait dialog -->
+<div class="modal fade" id="confirm-Information-wait">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Chờ kích hoạt</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số điện thoại: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Email: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Ngày sinh: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Ngày tạo: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group mb-0">
+                    <p><strong>Địa chỉ: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền hiện tại: </strong>5,000,000 đ</p>
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-primary">Chờ kích hoạt</span></p>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-6">
+                        <p><strong>Mặt trước CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="front-image">
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mặt sau CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="back-image">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
+                <button type="button" class="btn btn-warning " data-dismiss="modal">Yêu cầu bổ sung thông tin</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Information-block dialog -->
+<div class="modal fade" id="confirm-Information-block">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Đang bị khóa</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số điện thoại: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Email: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Ngày sinh: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Ngày tạo: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group mb-0">
+                    <p><strong>Địa chỉ: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền hiện tại: </strong>5,000,000 đ</p>
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-dabger">Đang bị khóa</span></p>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-6">
+                        <p><strong>Mặt trước CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="front-image">
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mặt sau CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="back-image">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Mở khóa</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Information-disable dialog -->
+<div class="modal fade" id="confirm-Information-disable">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Vô hiệu hóa</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số điện thoại: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Email: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Ngày sinh: </strong>00000000</p>
+                    <p class="col-md-6"><strong>Ngày tạo: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group mb-0">
+                    <p><strong>Địa chỉ: </strong>Nguyễn Văn A</p>
+                </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Số tiền hiện tại: </strong>5,000,000 đ</p>
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-danger">Vô hiệu hóa</span></p>
+                </div>
+                <div class="form-group row mb-0">
+                    <div class="col-md-6">
+                        <p><strong>Mặt trước CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="front-image">
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mặt sau CCCD: </strong></p>
+                        <img src="#" class="img-fluid rounded"
+                            style="width: 100%; height: 300px;" alt="back-image">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/javascripts/management.js"></script>
