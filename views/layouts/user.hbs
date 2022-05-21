@@ -4,6 +4,8 @@
 <head>
 	<title>{{title}}</title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<link rel='stylesheet' href='/stylesheets/transactionHistory.css' />
+
 	<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
 		integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
@@ -37,23 +39,23 @@
 										class="d-none d-md-inline">{{account.name}}</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-cart-shopping fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="/users/buyCard"><i class="fa fa-cart-shopping fa-fw"></i> <span
 										class="d-none d-md-inline">Mua thẻ</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-piggy-bank fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="/users/recharge"><i class="fa fa-piggy-bank fa-fw"></i> <span
 										class="d-none d-md-inline">Nạp tiền</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-money-bill-wave fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="/users/withdraw"><i class="fa fa-money-bill-wave fa-fw"></i> <span
 										class="d-none d-md-inline">Rút tiền</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-money-bill-transfer fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="/users/moneyTransfer"><i class="fa fa-money-bill-transfer fa-fw"></i> <span
 										class="d-none d-md-inline">Chuyển tiền</span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="#"><i class="fa fa-receipt fa-fw"></i> <span
+								<a class="nav-link pl-0 {{verifyAccount account.verify}}" href="/users/transactionHistory"><i class="fa fa-receipt fa-fw"></i> <span
 										class="d-none d-md-inline">Lịch sử giao dịch</span></a>
 							</li>
 

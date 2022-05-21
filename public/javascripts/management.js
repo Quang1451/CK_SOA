@@ -236,6 +236,27 @@ $(document).ready(() => {
         })
     })
 
+    /* Hiện dialog xác nhận xác minh tài khoản */
+    $('.btn-activated').on('click', ()=> {
+        $('#handle-activated-dialog').modal('show')
+    })
+
+    /* Hiện dialog xác nhận yêu cầu bổ xung thông tin */
+    $('.btn-update').on('click', ()=> {
+        $('#handle-update-dialog').modal('show')
+    })
+
+    /* Hiện dialog xác nhận yêu cầu bổ xung thông tin */
+    $('.btn-canceled').on('click', ()=> {
+        $('#handle-canceled-dialog').modal('show')
+    })
+
+    /* Hiện dialog xác nhận mở khóa tài khoản */
+    $('.btn-unlock').on('click', ()=> {
+        $('#handle-unlock-dialog').modal('show')
+    })
+
+
     /* Hiện dialog xem thông tin chuyển tiền */
     $('tbody').on('click', '.transfer', (e) => {
         $('#confirm-transfer').modal('show')

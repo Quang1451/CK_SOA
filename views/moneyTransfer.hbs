@@ -1,0 +1,41 @@
+<div class="container">
+    <h1 class="mb-4 text-center">Chuyển tiền</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="wrap p-4 p-lg-5">
+                <form method="POST" class="signin-form">
+                    <div class="form-group row mb-3">
+                        <div class="col-lg-12">
+                            <label class="label">Số điện thoại</label>
+                            <input type="number" maxlength="10" class="form-control" name="phone_number" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-lg-12">
+                            <label class="label">Số tiền muốn chuyển</label>
+                            <input type="number" minlength="5" min="50000" class="form-control" name="money_order"
+                                required>
+                            <p style="font-size: 10px; margin: 0;">Tối thiểu: 50,000 đồng</p>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-lg-12">
+                            <label class="label">Ghi chú</label>
+                            <textarea style="resize: none; height: 50px; overflow: hidden" maxlength="250"
+                                class="form-control" name="note" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-lg-12">
+                            <label class="label">Phí giao dịch</label>
+                            <input type="number" style="padding-top: 10px" class="form-control" name="fee_money_transfer" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="form-control btn btn-primary submit px-3">Chuyển tiền</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

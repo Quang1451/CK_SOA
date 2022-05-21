@@ -59,63 +59,6 @@
                                     <td>minhthu@p.gmail.com</td>
                                     <td><span class="disable">Đã vô hiệu hóa</span></td>
                                     <td>21/12/2019</td>
-                                </tr>
-
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
-                                </tr>
-                                <tr class="canceled">
-                                    <td>4</td>
-                                    <td>Minh Thư</td>
-                                    <td>minhthu@p.gmail.com</td>
-                                    <td><span class="disable">Đã vô hiệu hóa</span></td>
-                                    <td>21/12/2019</td>
                                 </tr> --}}
                             </tbody>
                         </table>
@@ -183,7 +126,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger btn-canceled">Hủy</button>
             </div>
         </div>
     </div>
@@ -234,9 +177,9 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
-                <button type="button" class="btn btn-warning " data-dismiss="modal">Yêu cầu bổ sung thông tin</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-success btn-activated">Xác minh</button>
+                <button type="button" class="btn btn-warning btn-update">Yêu cầu bổ sung thông tin</button>
+                <button type="button" class="btn btn-danger btn-canceled">Hủy</button>
             </div>
         </div>
     </div>
@@ -291,7 +234,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Mở khóa</button>
+                <button type="button" class="btn btn-primary btn-unlock">Mở khóa</button>
             </div>
         </div>
     </div>
@@ -340,11 +283,95 @@
                     </div>
                 </div>
             </div>
-
             <div class="modal-footer">
             </div>
         </div>
     </div>
+</div>
+
+
+<!-- Modal xác nhận xác minh tài khoản -->
+<div class="modal fade" id="handle-activated-dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Xác minh tài khoản</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Bạn có muốn xác minh tài khoản <strong id="strong-account">0000000001</strong> hay không?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">Xác nhận</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận yêu cầu bổ xung thông tin tài khoản -->
+<div class="modal fade" id="handle-update-dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Yêu cầu bổ xung thông tin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Bạn có muốn yêu cầu tài khoản <strong id="strong-account">0000000001</strong> bổ xung thông tin hay không?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">Xác nhận</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận vô hiệu hóa tài khoản -->
+<div class="modal fade" id="handle-canceled-dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Vô hiệu hóa tài khoản</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Bạn có muốn vô hiệu hóa tài khoản <strong id="strong-account">0000000001</strong> hay không?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">Xác nhận</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận mở khóa tài khoản -->
+<div class="modal fade" id="handle-unlock-dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Mở khóa tài khoản</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Bạn có muốn mở khóa tài khoản <strong id="strong-account">0000000001</strong> hay không?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">Xác nhận</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="/javascripts/management.js"></script>
