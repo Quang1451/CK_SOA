@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var check = require('../lib/check.js')
+
 
 /* GET users buy Card page. */
-router.get('/buyCard', function(req, res) {
+router.get('/buyCard',check.notLogin, check.isUser, function(req, res) {
   content = {
     layout: 'user.hbs',
     title: 'Mua thẻ cào điện thoại',
@@ -11,7 +13,7 @@ router.get('/buyCard', function(req, res) {
 });
 
 /* GET users recharge page. */
-router.get('/recharge', function(req, res) {
+router.get('/recharge',check.notLogin, check.isUser, function(req, res) {
   content = {
     layout: 'user.hbs',
     title: 'Nạp tiền',
@@ -20,7 +22,7 @@ router.get('/recharge', function(req, res) {
 });
 
 /* GET users withdraw page. */
-router.get('/withdraw', function(req, res) {
+router.get('/withdraw',check.notLogin, check.isUser, function(req, res) {
   content = {
     layout: 'user.hbs',
     title: 'Rút tiền',
@@ -29,7 +31,7 @@ router.get('/withdraw', function(req, res) {
 });
 
 /* GET users money transfer page. */
-router.get('/moneyTransfer', function(req, res) {
+router.get('/moneyTransfer',check.notLogin, check.isUser, function(req, res) {
   content = {
     layout: 'user.hbs',
     title: 'Chuyển tiền',
@@ -38,11 +40,20 @@ router.get('/moneyTransfer', function(req, res) {
 });
 
 /* GET users transaction history page. */
-router.get('/transactionHistory', function(req, res) {
+router.get('/transactionHistory',check.notLogin, check.isUser, function(req, res) {
   content = {
     layout: 'user.hbs',
     title: 'Lịch sử giao dịch',
   }
   res.render('transactionHistory', content)
+});
+
+/* GET users transaction history page. */
+router.get('/optTransfer',check.notLogin, check.isUser, function(req, res) {
+  content = {
+    layout: 'user.hbs',
+    title: 'Xác nhận OTP',
+  }
+  res.render('optTransfer', content)
 });
 module.exports = router;

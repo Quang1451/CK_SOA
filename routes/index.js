@@ -507,9 +507,26 @@ router.post('/forgetPassword', function (req, res) {
     randomOTP.OTP((otp) => {
       /* Tiến hành gửi mã otp */
       sendMail.sendOTP(email,otp)
-      res.redirect(303, '/login');
+      res.redirect(303, '/otpForgetPassword');
     });
   })
 });
+
+/* GET input opt forget password page*/
+router.get('/otpForgetPassword', check.login, function (req, res) {
+  content = {
+    title: 'OTP quên mật khẩu',
+  }
+  res.render('otpForgetPassword', content);
+});
+
+/* GET change forget password page*/
+router.get('/changeForget', check.login, function (req, res) {
+  content = {
+    title: 'Thay đổi mật khẩu',
+  }
+  res.render('changeForget', content);
+});
+
 
 module.exports = router;
