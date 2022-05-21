@@ -10,8 +10,8 @@
                         </div>
                         <select id="status" name="status" class="custom-select col-12 col-md-4">
                             <option value="tk_All"> --- Tất cả ---</option>
-                            <option value="tk_ChoKichHoat">Tài khoản chờ kích hoạt</option>
-                            <option value="tk_DaKichHoat">Tài khoản đã kích hoạt</option>
+                            <option value="tk_ChoKichHoat">Tài khoản chờ xác minh</option>
+                            <option value="tk_DaKichHoat">Tài khoản đã xác minh</option>
                             <option value="tk_DaVoHieuHoa">Tài khoản đã vô hiệu hóa</option>
                             <option value="tk_DangBiKhoa">Tài khoản đang bị khóa</option>
                         </select>
@@ -28,10 +28,11 @@
                                     <th scope="col">Họ và tên</th>
                                     <th scope="col">Trạng thái</th>
                                     <th scope="col">Ngày tạo</th>
+                                    <th scope="col">Ngày cập nhật</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="activated">
+                            <tbody id="account-table">
+                                {{!-- <tr class="activated">
                                     <td>1</td>
                                     <td>Minh Thư</td>
                                     <td>minhthu@p.gmail.com</td>
@@ -115,7 +116,7 @@
                                     <td>minhthu@p.gmail.com</td>
                                     <td><span class="disable">Đã vô hiệu hóa</span></td>
                                     <td>21/12/2019</td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>
@@ -134,7 +135,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id="body-activated-dialog">
                 <div class="form-group row mb-0">
                     <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
                     <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
@@ -182,8 +183,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
             </div>
         </div>
     </div>
@@ -199,7 +199,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id="body-wait-dialog">
                 <div class="form-group row mb-0">
                     <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
                     <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
@@ -236,7 +236,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
                 <button type="button" class="btn btn-warning " data-dismiss="modal">Yêu cầu bổ sung thông tin</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
             </div>
         </div>
     </div>
@@ -252,7 +252,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id="body-block-dialog">
                 <div class="form-group row mb-0">
                     <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
                     <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
@@ -270,7 +270,7 @@
                 </div>
                 <div class="form-group row mb-0">
                     <p class="col-md-6"><strong>Số tiền hiện tại: </strong>5,000,000 đ</p>
-                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-dabger">Đang bị khóa</span></p>
+                    <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-danger">Đang bị khóa</span></p>
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-6">
@@ -284,11 +284,14 @@
                             style="width: 100%; height: 300px;" alt="back-image">
                     </div>
                 </div>
+                <div class="form-group row mb-0">
+                    <p class="col-md-6"><strong>Ngày khóa: </strong>5,000,000 đ</p>
+                    <p class="col-md-6"><strong>Ghi chú: </strong><span class="text-dabger">Đang bị khóa</span></p>
+                </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Mở khóa</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
             </div>
         </div>
     </div>
@@ -304,7 +307,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id="body-disable-dialog">
                 <div class="form-group row mb-0">
                     <p class="col-md-6"><strong>Mã tài khoản: </strong>00000000</p>
                     <p class="col-md-6"><strong>Họ và tên: </strong>Nguyễn Văn A</p>
@@ -339,8 +342,6 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Xác minh</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
             </div>
         </div>
     </div>

@@ -13,6 +13,7 @@ const accountSchema = mongoose.Schema({
     otp: String,
     otpTime: Date,
     createDate: {type: Date, default: new Date()},
+    CCCDDate: {type: Date, default: new Date()},
     role: {type: String, default: 'user'},
     changePassword: {type: Boolean, default: true},
     verify: {type: String, default: 'Chờ xác minh'},

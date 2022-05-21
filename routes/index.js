@@ -7,29 +7,10 @@ var fs = require('fs')
 var path = require('path')
 var check = require('../lib/check.js')
 var randomAccount = require('../lib/randomAccount.js')
+var sendMail = require('../lib/sendMail.js')
 
-const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
 const randomOTP = require('../lib/randomOTP.js');
-
-var transporter = nodemailer.createTransport({
-  /* host: 'mail.phongdaotao.com',
-  port: 25,
-  secure: false,
-  auth: {
-    user: 'sinhvien@phongdaotao.com',
-    pass: 'svtdtu',
-  },
-  tls: {
-    // do not fail on invalid certs
-    rejectUnauthorized: false
-  }, */
-  service: 'gmail',
-  auth: {
-    user: 'nguyenngocdangquang14274@gmail.com@gmail.com',
-    pass: 'quang14052001',
-  },
-});
 
 /* GET home page. */
 router.get('/', check.notLogin, check.firstLogin, function (req, res) {
@@ -190,6 +171,7 @@ router.get('/updateCCCD', check.notLogin, check.firstLogin, function (req, res) 
 /* POST update CCCD page */
 router.post('/updateCCCD', function (req, res) {
   var account = req.session.account
+  var id = account._id
   var form = new multiparty.Form()
   form.parse(req, function (err, fields, files) {
     if (err) throw err
@@ -238,8 +220,11 @@ router.post('/updateCCCD', function (req, res) {
       else
         console.log('Lưu hình ảnh mặt sau CCCD thành công!')
     })
-
-    res.redirect(303,'/')
+    Account.updateOne({_id: id},{$set: {CCCDDate: new Date()}}, (err, data) => {
+      account.CCCDDate = data.CCCDDate
+    })
+    req.session.account = account
+    res.redirect(303, '/')
   })
 })
 
@@ -282,6 +267,15 @@ router.post('/login', function (req, res) {
       return res.redirect(303, '/login')
     }
 
+    /* Thông báo account bị vô hiệu hóa */
+    if (account.verify == 'Đã vô hiệu hóa') {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008'
+      }
+      return res.redirect(303, '/login')
+    }
+
     /* Khóa tạm thời vĩnh viễn */
     if (account.lockForever) {
       req.session.message = {
@@ -317,10 +311,10 @@ router.post('/login', function (req, res) {
         case 3:
           var dt = new Date();
           dt.setMinutes(dt.getMinutes() + 1);
-          update = { $set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường lúc ' + (new Date()) } }
+          update = { $set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường'} }
           break
         case 6:
-          update = { $set: { failTimes: timeErr, lockForever: true, message: '1 lần đăng nhập bất thường lúc ' + (new Date()) } }
+          update = { $set: { failTimes: timeErr, lockForever: true, message: '1 lần đăng nhập bất thường', lockTime: new Date() } }
           break
         default:
           update = { $set: { failTimes: timeErr } }
@@ -435,15 +429,7 @@ router.post('/register', function (req, res) {
           /* Ngẫu nhiên password */
           var password = randomAccount.createPassword()
 
-          let mailOption = {
-            from: 'nguyenngocdangquang14274@gmail.com', /* 'sinhvien@phongdaotao.com' */
-            to: email[0],
-            subject: 'Tạo tài khoản ví điện tử',
-            text: `Username: ${username}\nPassword: ${password}`
-          }
-
           var hashpasssword = bcrypt.hashSync(password, 10);
-
           new Account({
             phoneNumber: phone[0],
             email: email[0],
@@ -456,14 +442,9 @@ router.post('/register', function (req, res) {
             front_CCCD: path.basename(newFrontCCCD),
             back_CCCD: path.basename(newBackCCCD)
           }).save()
+          /* Tiến hành gửi mail */
+          sendMail.sendAccount(email, username, password)
 
-          /* Tiến hành gửi username và password tới email */
-          transporter.sendMail(mailOption, (err, data) => {
-            if (err)
-              console.log(err.message)
-            else
-              console.log('Gửi thông tin thành công')
-          })
           res.redirect(303, '/login')
         })
       })
@@ -477,43 +458,58 @@ router.get('/logout', function (req, res) {
   res.redirect(303, '/login')
 })
 
-/* GET users forget password. */
-router.get('/forgetPassword', function(req, res, next) {
-  res.render('forgetPasssword');
+/* GET forget password page. */
+router.get('/forgetPassword', check.login, function (req, res) {
+  content = {
+    title: 'Quên mật khẩu',
+  }
+  res.render('forgetPassword', content);
 });
 
-/* POST users forget passsword. */
-router.post('/', function(req, res, next) {
-  var {email, phone} = req.body
-  if (!validator.validate(email)){
+/* POST forget passsword page. */
+router.post('/forgetPassword', function (req, res) {
+  var { email, phone } = req.body
+  var message
+  if (!email) {
+    message = 'Chưa nhập email!'
+  }
+  else if (!validator.validate(email)) {
     message = 'Email không hợp lệ!'
   }
-  else if (!phone){
+  else if (!phone) {
+    message = 'Chưa nhập số điện thoại!'
+  }
+  else if (phone.length < 10) {
     message = 'Số điện thoại không hợp lệ!'
   }
-  else
-    //Kiểm tra tài khoản email và số điện thoại có tồn tại trong database hay không ???
-    
 
-    //Tạo mã OTP
-    var otp = randomOTP.OTP();
-    //Thông tin email
-    let mailOption = {
-      from: 'nguyenngocdangquang14274@gmail.com',
-      to: email,
-      subject: 'Lấy lại mật khẩu',
-      text: `Mã OTP của quý khách là: ` + otp
+  if (message) {
+    req.session.message = {
+      type: 'danger',
+      msg: message
+    }
+    return res.redirect(303, '/forgetPassword')
+  }
+
+  Account.find({ phoneNumber: phone, email: email }, function (err, accounts) {
+    if (err) throw err
+
+    if (accounts.length == 0) {
+      req.session.message = {
+        type: 'danger',
+        msg: 'Số điện thoại và email không tồn tại!'
+      }
+      return res.redirect(303, '/forgetPassword')
     }
 
-    //Tiến hành gửi mã OTP tới email 
-    transporter.sendMail(mailOption, (err, data) => {
-      if (err)
-        console.log(err.message)
-      else
-        console.log('Gửi thông tin thành công')
-    })
-
-  res.redirect('login');
+    //Kiểm tra tài khoản email và số điện thoại có tồn tại trong database hay không ???
+    //Tạo mã OTP
+    randomOTP.OTP((otp) => {
+      /* Tiến hành gửi mã otp */
+      sendMail.sendOTP(email,otp)
+      res.redirect(303, '/login');
+    });
+  })
 });
 
 module.exports = router;

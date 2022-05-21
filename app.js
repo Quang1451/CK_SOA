@@ -10,7 +10,8 @@ var Account = require('./models/account')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var adminRouter = require('./routes/admin')
+var adminRouter = require('./routes/admin');
+var apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -29,12 +30,14 @@ app.engine('hbs', exphbs.engine({
       return day + "/" + month + "/" + year;
     },
 
+    /* Format số tiền */
     formatMoney: function(money) {
       money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
       money = money.replaceAll('.',',')
       return money.replace('VND','đ')
     },
 
+    /* Kiểm tra xen nếu tài khoản chưa xác minh thì khóa một vài tính năng */
     verifyAccount: function(verify) {
       if(verify == 'Đã xác minh')
         return
@@ -77,6 +80,7 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
