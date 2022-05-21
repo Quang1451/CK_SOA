@@ -10,6 +10,7 @@ var randomAccount = require('../lib/randomAccount.js')
 
 const nodemailer = require('nodemailer')
 const Account = require('../models/account.js');
+const randomOTP = require('../lib/randomOTP.js');
 
 var transporter = nodemailer.createTransport({
   /* host: 'mail.phongdaotao.com',
@@ -25,8 +26,8 @@ var transporter = nodemailer.createTransport({
   }, */
   service: 'gmail',
   auth: {
-    user: 'huaphucdung2001@gmail.com',
-    pass: '15062001dung',
+    user: 'nguyenngocdangquang14274@gmail.com@gmail.com',
+    pass: 'quang14052001',
   },
 });
 
@@ -435,7 +436,7 @@ router.post('/register', function (req, res) {
           var password = randomAccount.createPassword()
 
           let mailOption = {
-            from: 'huaphucdung2001@gmail.com', /* 'sinhvien@phongdaotao.com' */
+            from: 'nguyenngocdangquang14274@gmail.com', /* 'sinhvien@phongdaotao.com' */
             to: email[0],
             subject: 'Tạo tài khoản ví điện tử',
             text: `Username: ${username}\nPassword: ${password}`
@@ -476,5 +477,43 @@ router.get('/logout', function (req, res) {
   res.redirect(303, '/login')
 })
 
+/* GET users forget password. */
+router.get('/forgetPassword', function(req, res, next) {
+  res.render('forgetPasssword');
+});
+
+/* POST users forget passsword. */
+router.post('/', function(req, res, next) {
+  var {email, phone} = req.body
+  if (!validator.validate(email)){
+    message = 'Email không hợp lệ!'
+  }
+  else if (!phone){
+    message = 'Số điện thoại không hợp lệ!'
+  }
+  else
+    //Kiểm tra tài khoản email và số điện thoại có tồn tại trong database hay không ???
+    
+
+    //Tạo mã OTP
+    var otp = randomOTP.OTP();
+    //Thông tin email
+    let mailOption = {
+      from: 'nguyenngocdangquang14274@gmail.com',
+      to: email,
+      subject: 'Lấy lại mật khẩu',
+      text: `Mã OTP của quý khách là: ` + otp
+    }
+
+    //Tiến hành gửi mã OTP tới email 
+    transporter.sendMail(mailOption, (err, data) => {
+      if (err)
+        console.log(err.message)
+      else
+        console.log('Gửi thông tin thành công')
+    })
+
+  res.redirect('login');
+});
 
 module.exports = router;
