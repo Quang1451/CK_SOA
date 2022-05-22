@@ -1,26 +1,31 @@
+let urlAccount = 'http://localhost:3000/api/allAccount'
+let usernameAccount
 $(document).ready(() => {
 
-    loadAccount('http://localhost:3000/api/allAccount')
+    /* Sự kiện cho trang quản lý tài khoản */
+    /* Tải danh sách tìa khoản khi mới mở trang */
+    loadAccount(urlAccount)
 
     /* Lấy danh sách tài khoanar tùy theo trạng thái */
     $('#status').on('change', () => {
         switch ($('#status').val()) {
             case 'tk_ChoKichHoat':
-                loadAccount('http://localhost:3000/api/waitAccount')
+                urlAccount = 'http://localhost:3000/api/waitAccount'
                 break
             case 'tk_DaKichHoat':
-                loadAccount('http://localhost:3000/api/activatedAccount')
+                urlAccount = 'http://localhost:3000/api/activatedAccount'
                 break
             case 'tk_DaVoHieuHoa':
-                loadAccount('http://localhost:3000/api/canceledAccount')
+                urlAccount = 'http://localhost:3000/api/canceledAccount'
                 break
             case 'tk_DangBiKhoa':
-                loadAccount('http://localhost:3000/api/lockedAccount')
+                urlAccount = 'http://localhost:3000/api/lockedAccount'
                 break
             default:
-                loadAccount('http://localhost:3000/api/allAccount')
+                urlAccount = 'http://localhost:3000/api/allAccount'
                 break;
         }
+        loadAccount(urlAccount)
     })
 
     /* Hiện dialog xem thông tin tài khoản đã kích hoạt */
@@ -32,6 +37,7 @@ $(document).ready(() => {
         .then(json => {
             if(json.code === 0){
                 var user = json.user
+                usernameAccount = user.username
                 var body = $('#body-activated-dialog').empty()
         
                 $(body).append(`<div class="form-group row mb-0">
@@ -92,6 +98,7 @@ $(document).ready(() => {
         .then(json => {
             if(json.code === 0){
                 var user = json.user
+                usernameAccount = user.username
                 var body = $('#body-block-dialog').empty()
 
                 $(body).append(`<div class="form-group row mb-0">
@@ -143,6 +150,7 @@ $(document).ready(() => {
         .then(json => {
             if(json.code === 0){
                 var user = json.user
+                usernameAccount = user.username
                 var body = $('#body-wait-dialog').empty()
                 var color
                 switch(user.verify){
@@ -198,6 +206,7 @@ $(document).ready(() => {
         .then(json => {
             if(json.code === 0){
                 var user = json.user
+                usernameAccount = user.username
                 var body = $('#body-disable-dialog').empty()
 
                 $(body).append(`<div class="form-group row mb-0">
@@ -238,24 +247,59 @@ $(document).ready(() => {
 
     /* Hiện dialog xác nhận xác minh tài khoản */
     $('.btn-activated').on('click', ()=> {
+        $('#activated-username').html(usernameAccount)
         $('#handle-activated-dialog').modal('show')
     })
 
     /* Hiện dialog xác nhận yêu cầu bổ xung thông tin */
     $('.btn-update').on('click', ()=> {
+        $('#update-username').html(usernameAccount)
         $('#handle-update-dialog').modal('show')
     })
 
     /* Hiện dialog xác nhận yêu cầu bổ xung thông tin */
     $('.btn-canceled').on('click', ()=> {
+        $('#canceled-username').html(usernameAccount)
         $('#handle-canceled-dialog').modal('show')
     })
 
     /* Hiện dialog xác nhận mở khóa tài khoản */
     $('.btn-unlock').on('click', ()=> {
+        $('#unlock-username').html(usernameAccount)
         $('#handle-unlock-dialog').modal('show')
     })
 
+    /* Sự kiện gửi yêu cầu xác minh tài khoản */
+    $('#confirm-activated').on('click', ()=> {
+        handleAccount('http://localhost:3000/api/handleActivated/'+usernameAccount)
+        $('#confirm-Information-wait').modal('hide')
+        $('#handle-activated-dialog').modal('hide')
+    })
+
+    /* Sự kiện gửi yêu cầu bổ xung thông tin */
+    $('#confirm-update').on('click', ()=> {
+        handleAccount('http://localhost:3000/api/handleUpdate/'+usernameAccount)
+        $('#confirm-Information-wait').modal('hide')
+        $('#handle-update-dialog').modal('hide')
+    })
+
+    /* Sự kiện gửi yêu cầu vô hiệu hóa tài khoản */
+    $('#confirm-canceled').on('click', ()=> {
+        handleAccount('http://localhost:3000/api/handleCanceled/'+usernameAccount)
+        $('#confirm-Information-wait').modal('hide')
+        $('#confirm-Information-activated').modal('hide')
+        $('#handle-canceled-dialog').modal('hide')
+    })
+
+    /* Sự kiện gửi yêu cầu mở khóa tài khoản */
+    $('#confirm-unlock').on('click', ()=> {
+        handleAccount('http://localhost:3000/api/handleUnlock/'+usernameAccount)
+        $('#confirm-Information-block').modal('hide')
+        $('#handle-unlock-dialog').modal('hide')
+    })
+
+
+    /* Sự kiện cho trang quản lý các giao dịch */
 
     /* Hiện dialog xem thông tin chuyển tiền */
     $('tbody').on('click', '.transfer', (e) => {
@@ -305,6 +349,15 @@ function loadAccount(url) {
 
                 stt += 1
             });
+        })
+}
+
+function handleAccount(apiUrl) {
+    fetch(apiUrl ,{method: 'POST'})
+        .then(res => res.json())
+        .then(json => {
+            if(json.code === 0)
+                loadAccount(urlAccount)
         })
 }
 

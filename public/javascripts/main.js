@@ -12,7 +12,3 @@ $(".custom-file-input").on("change", function () {
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
 
-$('.verify').on('click', (e) => {
-    e.preventDefault();
-    $('#flipFlop').modal('show');
-})

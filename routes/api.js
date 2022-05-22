@@ -54,4 +54,51 @@ router.get('/accountInfo/:id', check.notLogin, check.isAdmin, function(req, res)
     })
 });
 
+/* GET api handle activated account. */
+router.post('/handleActivated/:username', check.notLogin, check.isAdmin, function(req, res) {
+    if(!req.params.username)
+        return res.json({code: 1})
+    var username = req.params.username
+
+    Account.updateOne({username: username}, {$set: {verify: 'Đã xác minh'}},(err, accounts) => {
+        if (err) throw err
+        res.json({code: 0})
+    })
+});
+
+/* GET api handle send request update account. */
+router.post('/handleUpdate/:username', check.notLogin, check.isAdmin, function(req, res) {
+    if(!req.params.username)
+        return res.json({code: 1})
+    var username = req.params.username
+
+    Account.updateOne({username: username}, {$set: {verify: 'Chờ cập nhật'}},(err, accounts) => {
+        if (err) throw err
+        res.json({code: 0})
+    })
+});
+
+/* GET api handle canceled account. */
+router.post('/handleCanceled/:username', check.notLogin, check.isAdmin, function(req, res) {
+    if(!req.params.username)
+        return res.json({code: 1})
+    var username = req.params.username
+
+    Account.updateOne({username: username}, {$set: {verify: 'Đã vô hiệu hóa'}},(err, accounts) => {
+        if (err) throw err
+        res.json({code: 0})
+    })
+});
+
+/* GET api handle unlock account. */
+router.post('/handleUnlock/:username', check.notLogin, check.isAdmin, function(req, res) {
+    if(!req.params.username)
+        return res.json({code: 1})
+    var username = req.params.username
+
+    Account.updateOne({username: username}, {$set: {lockForever: false}},(err, accounts) => {
+        if (err) throw err
+        res.json({code: 0})
+    })
+});
 module.exports = router;
