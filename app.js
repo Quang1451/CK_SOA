@@ -7,6 +7,7 @@ var logger = require('morgan');
 var bcrypt = require("bcrypt");
 var exphbs = require('express-handlebars')
 var Account = require('./models/account')
+var Card = require('./models/card')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -31,15 +32,15 @@ app.engine('hbs', exphbs.engine({
     },
 
     /* Format số tiền */
-    formatMoney: function(money) {
-      money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
-      money = money.replaceAll('.',',')
-      return money.replace('VND','đ')
+    formatMoney: function (money) {
+      money = money.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+      money = money.replaceAll('.', ',')
+      return money.replace('VND', 'đ')
     },
 
     /* Kiểm tra xen nếu tài khoản chưa xác minh thì khóa một vài tính năng */
-    verifyAccount: function(verify) {
-      if(verify == 'Đã xác minh')
+    verifyAccount: function (verify) {
+      if (verify == 'Đã xác minh')
         return
       return 'verify'
     }
@@ -51,25 +52,49 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'secret' })),
+app.use(session({ secret: 'secret' }))
 
-  Account.find((err, accounts) => {
-    if (accounts.length) return
+Account.find((err, accounts) => {
+  if (accounts.length) return
 
-    const hashpasssword = bcrypt.hashSync('123456', 10);
-    new Account({
-      phonneNumber: '0000000000',
-      email: 'admin@gmail.com',
-      birthday: new Date(),
-      name: 'Admin',
-      username: '0000000000',
-      password: hashpasssword,
-      role: 'admin',
-      changePassword: false,
-      verify: 'Đã xác minh'
-    }).save();
-  })
+  const hashpasssword = bcrypt.hashSync('123456', 10);
+  new Account({
+    phonneNumber: '0000000000',
+    email: 'admin@gmail.com',
+    birthday: new Date(),
+    name: 'Admin',
+    username: 'admin',
+    password: hashpasssword,
+    role: 'admin',
+    changePassword: false,
+    verify: 'Đã xác minh'
+  }).save();
+})
 
+Card.find((err, cards) => {
+  if (cards.length) return
+  
+  new Card({
+    id: '111111',
+    time: new Date('2022-10-10T00:00:00.000+00:00'),
+    CVV:  '411',
+    note: 'Không giới hạn số lần nạp và số tiền mỗi lần nạp'
+  }).save()
+
+  new Card({
+    id: '222222',
+    time: new Date('2022-11-11T00:00:00.000+00:00'),
+    CVV:  '443',
+    note: 'Không giới hạn số lần nạp nhưng chỉ được nạp tối đa 1 triệu/lần'
+  }).save()
+
+  new Card({
+    id: '333333',
+    time: new Date('2022-12-12T00:00:00.000+00:00'),
+    CVV:  '577',
+    note: 'Khi nạp bằng thẻ này thì luôn nhận được thông báo là “thẻ hết tiền”'
+  }).save()
+})
 
 app.use(function (req, res, next) {
   res.locals.account = req.session.account

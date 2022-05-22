@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const cardSchema = mongoose.Schema({
-    idCard: String,
+    id: String,
     time: Date,
     CVV: String,
     note: String
