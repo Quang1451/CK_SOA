@@ -7,6 +7,7 @@ const billSchema = mongoose.Schema({
     time: {type: Date, default: new Date()},
     content: {type: String, default: ''},
     money: Number,
+    verify: {type: String, default: 'Đã duyệt'} 
 })
 
 const bill = mongoose.model('Bill', billSchema)
