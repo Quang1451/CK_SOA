@@ -14,5 +14,18 @@ $(document).ready(() => {
             minMoney.value = 50000 * time
         }
     })
+
+    /* Kiểm tra số thẻ lớn hơn 5 hay nhở hơn 1 hay không */
+    $('#count').on('change', (e) => {
+        var count = e.target
+        if(parseInt(count.value) > 5)
+            count.value = 5
+        else if(parseInt(count.value) < 1)
+            count.value = 1
+    })
+
+    $('#count, #price').on('change', (e) => {
+        $('#money').val($('#count').val() * $('#price').val() - $('#fee').val())
+    })
 })
 

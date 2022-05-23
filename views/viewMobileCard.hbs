@@ -1,0 +1,30 @@
+<div class="container">
+    <h1 class="mb-4 text-center">Hóa đơn mua thẻ</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="wrap p-4 p-lg-6">
+                <div class="form-group row">
+                    <h5 class="col-lg-6"><strong>Loại thẻ: </strong>{{type}}</h5>
+                    <h5 class="col-lg"><strong>Mệnh giá: </strong>{{formatMoney price}}</h5>
+                </div>
+                <div class="form-group row">
+                    <h5 class="col-lg-6"><strong>Số lượng: </strong>{{count}}</h5>
+                    <h5 class="col-lg"><strong>Số tiền: </strong>{{formatMoney money}}</h5>
+                </div>
+                <div class="form-group">
+                    <h5><strong>Thời gian: </strong>{{formatDateAndTime time}}</h5>
+                </div>
+
+                <div class="form-group">
+                    <h5><strong>Phí giao dịch: </strong>{{formatMoney fee}}</h5>
+                    <h5><strong>Các số seri: </strong>{{#each seri}}
+                    {{.}}
+                    {{/each}}</h5>           
+                </div>
+                <div class="text-center text-lg-right">
+                    <a href="/users/buyCard" class="btn btn-primary">Tiếp tục mua thẻ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

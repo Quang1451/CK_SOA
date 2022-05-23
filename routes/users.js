@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var check = require('../lib/check.js')
+var randomMobileCard = require('../lib/randomMobileCard.js')
 const Account = require('../models/account')
 const Card = require('../models/card')
-const Bill = require('../models/bill')
+const Bill = require('../models/bill');
+const bill = require('../models/bill');
 
 /* GET users buy Card page. */
 router.get('/buyCard', check.notLogin, check.isUser, function (req, res) {
@@ -12,6 +14,81 @@ router.get('/buyCard', check.notLogin, check.isUser, function (req, res) {
     title: 'Mua thẻ cào điện thoại',
   }
   res.render('buyCard', content)
+});
+
+/* POST users buy Card page */
+router.post('/buyCard', check.notLogin, check.isUser, function (req, res) {
+  var account = req.session.account
+  var { type, price, count, fee, money } = req.body
+  var fee = fee || 0
+  var message
+
+  if (!type)
+    message = 'Chưa chọn loại thẻ!'
+  else if (!price)
+    message = 'Chưa chọn mệnh giá!'
+  else if (!price)
+    message = 'Chưa nhập số lượng!'
+
+  if (message) {
+    req.session.message = {
+      type: 'danger',
+      msg: message
+    }
+    return res.redirect(303, '/users/buyCard')
+  }
+  /* Kiểm tra tài khoản có đủ số tiền hay không */
+  if (account.money >= parseInt(money)) {
+    randomMobileCard.createSeri(type, count, (seri) => {
+      Account.updateOne({ _id: account._id }, { $set: { money: account.money - money } }, (err, accounts) => {
+        if (err) throw err
+        account.money = account.money - money
+        req.session.account = account
+
+        var info = { type: type, price: price, count: count, fee: fee, seri: seri }
+        var bill = new Bill({
+          userSend: account.username,
+          type: 'Mua thẻ',
+          money: parseInt(money),
+          content: JSON.stringify(info)
+        })
+        bill.save()
+        return res.redirect(303, '/users/viewMobileCard/' + bill._id)
+      })
+    })
+  }
+  else {
+    req.session.message = {
+      type: 'danger',
+      msg: 'Tài khoản không đủ tiền!'
+    }
+    return res.redirect(303, '/users/buyCard')
+  }
+})
+
+/* GET users view mobile card page. */
+router.get('/viewMobileCard/:id', check.notLogin, check.isUser, function (req, res) {
+  if (!req.params.id)
+    return res.redirect(303, '/users/buyCard')
+
+  Bill.findOne({ _id: req.params.id }, (err, bill) => {
+    if (bill === undefined)
+      return res.redirect(303, '/users/buyCard')
+
+    var info = JSON.parse(bill.content)
+    content = {
+      layout: 'user.hbs',
+      title: 'Xem hóa đơn mua thẻ',
+      time: bill.time,
+      type: info.type,
+      price: info.price,
+      count: info.count,
+      fee: info.fee,
+      seri: info.seri,
+      money: bill.money
+    }
+    res.render('viewMobileCard', content)
+  })
 });
 
 /* GET users recharge page. */
@@ -176,7 +253,7 @@ router.post('/withdraw', check.notLogin, check.isUser, function (req, res) {
               money: parseInt(money),
               content: note
             }).save()
-  
+
             req.session.message = {
               type: 'success',
               msg: 'Rút tiền thành công!'
@@ -192,9 +269,9 @@ router.post('/withdraw', check.notLogin, check.isUser, function (req, res) {
             type: 'Rút tiền',
             money: parseInt(money),
             content: note,
-            verify: 'Chờ duyệt'
+            verify: 'Đang chờ'
           }).save()
-  
+
           req.session.message = {
             type: 'success',
             msg: 'Số tiền lớn hơn 5 triệu đồng phải đợi admin duyệt!'
