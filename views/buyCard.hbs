@@ -47,6 +47,11 @@
                             <input class="form-control" type="number" id="money" name="money" readonly>
                         </div>
                     </div>
+                    {{#if message}}
+                    <div class="alert alert-{{message.type}}">
+                        {{message.msg}}
+                    </div>
+                    {{/if}}
                     <div class="form-group">
                         <button type=" submit " class="form-control btn btn-primary btn-sm submit px-3 ">Xác
                             nhận</button>

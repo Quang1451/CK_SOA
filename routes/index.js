@@ -309,6 +309,7 @@ router.post('/login', function (req, res) {
 
       switch (timeErr) {
         case 3:
+          /* Tạo thời gian khóa 1 phút */
           var dt = new Date();
           dt.setMinutes(dt.getMinutes() + 1);
           update = { $set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường'} }
