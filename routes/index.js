@@ -11,6 +11,7 @@ var sendMail = require('../lib/sendMail.js')
 
 const Account = require('../models/account.js');
 const randomOTP = require('../lib/randomOTP.js');
+const { Console } = require('console');
 
 /* GET home page. */
 router.get('/', check.notLogin, check.firstLogin, function (req, res) {
@@ -311,7 +312,7 @@ router.post('/login', function (req, res) {
         case 3:
           var dt = new Date();
           dt.setMinutes(dt.getMinutes() + 1);
-          update = { $set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường'} }
+          update = { $set: { failTimes: timeErr, lockTime: dt, message: '1 lần đăng nhập bất thường'}}
           break
         case 6:
           update = { $set: { failTimes: timeErr, lockForever: true, message: '1 lần đăng nhập bất thường', lockTime: new Date() } }
@@ -491,6 +492,7 @@ router.post('/forgetPassword', function (req, res) {
     return res.redirect(303, '/forgetPassword')
   }
 
+  //Kiểm tra tài khoản email và số điện thoại có tồn tại trong database
   Account.find({ phoneNumber: phone, email: email }, function (err, accounts) {
     if (err) throw err
 
@@ -502,10 +504,13 @@ router.post('/forgetPassword', function (req, res) {
       return res.redirect(303, '/forgetPassword')
     }
 
-    //Kiểm tra tài khoản email và số điện thoại có tồn tại trong database hay không ???
+    
     //Tạo mã OTP
     randomOTP.OTP((otp) => {
       /* Tiến hành gửi mã otp */
+      Account.updateOne({ email: email }, { $set: { otp: otp, otpTime: new Date() } }, (err, accounts) => {
+        if (err) throw err
+      })
       sendMail.sendOTP(email,otp)
       res.redirect(303, '/otpForgetPassword');
     });
@@ -520,12 +525,70 @@ router.get('/otpForgetPassword', check.login, function (req, res) {
   res.render('otpForgetPassword', content);
 });
 
+/* POST input opt forget password page*/
+router.post('/otpForgetPassword', function (req, res) {
+  var form = new multiparty.Form()
+  form.parse(req, function (err, otp) {
+    if (err) throw err
+    var { OTP } = otp
+    Account.findOne({ otp: OTP }, (err, account) => {
+      if (err) throw err
+      var dt = account.otpTime
+      dt.setMinutes(dt.getMinutes()+1)
+      if (dt <= new Date() ) {
+          req.session.message = {
+            type: 'danger',
+            msg: 'Mã OTP đã hết hiệu lực sau 1 phút. Xin quý khách vui lòng tạo mã mới!'
+          }
+          return res.redirect(303, '/forgetPassword')
+        }
+      else{
+        req.session.otp = OTP
+        res.redirect(303, '/changeForget')
+      }
+    })
+  })
+});
+
+
 /* GET change forget password page*/
 router.get('/changeForget', check.login, function (req, res) {
   content = {
     title: 'Thay đổi mật khẩu',
   }
   res.render('changeForget', content);
+});
+
+/* POST change forget password page*/
+router.post('/changeForget', check.login, function (req, res) {
+  var {newPass, reNewPass} = req.body
+  var message
+  var otp = req.session.otp
+  console.log(newPass)
+
+  if(!newPass)
+    message = 'Chưa nhập mật khẩu mới!'
+  else if (!reNewPass)
+    message = 'Chưa nhập xác nhận!'
+  else if (newPass.length < 6)
+    message = 'Mật khẩu phải dài hơn 6 ký tự!'
+  else if (reNewPass != newPass)
+    message = 'Mật khẩu nhập lại không đúng!'
+    
+  if (message != null){
+    req.session.message = {
+      type: 'danger',
+      msg: message
+    }
+    console.log(message)
+    return res.redirect('changeForget')
+  }
+
+  var hashpasssword = bcrypt.hashSync(newPass, 10);
+  Account.updateOne({ otp: otp }, { $set: { password: hashpasssword } }, (err) => {
+    if (err) throw err
+    res.redirect(303, '/login')
+  })
 });
 
 
