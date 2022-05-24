@@ -1,4 +1,4 @@
-let urlAccount = 'http://localhost:3000/api/allAccount'
+let urlAccount = '/api/allAccount'
 let usernameAccount
 $(document).ready(() => {
 
@@ -10,19 +10,19 @@ $(document).ready(() => {
     $('#status').on('change', () => {
         switch ($('#status').val()) {
             case 'tk_ChoKichHoat':
-                urlAccount = 'http://localhost:3000/api/waitAccount'
+                urlAccount = '/api/waitAccount'
                 break
             case 'tk_DaKichHoat':
-                urlAccount = 'http://localhost:3000/api/activatedAccount'
+                urlAccount = '/api/activatedAccount'
                 break
             case 'tk_DaVoHieuHoa':
-                urlAccount = 'http://localhost:3000/api/canceledAccount'
+                urlAccount = '/api/canceledAccount'
                 break
             case 'tk_DangBiKhoa':
-                urlAccount = 'http://localhost:3000/api/lockedAccount'
+                urlAccount = '/api/lockedAccount'
                 break
             default:
-                urlAccount = 'http://localhost:3000/api/allAccount'
+                urlAccount = '/api/allAccount'
                 break;
         }
         loadAccount(urlAccount)
@@ -32,7 +32,7 @@ $(document).ready(() => {
     $('tbody').on('click', '.activated', (e) => {
         var row = $(e.target).closest('tr')
         var id = $(row).data('id')
-        fetch('http://localhost:3000/api/accountInfo/'+id)
+        fetch('/api/accountInfo/'+id)
         .then(res => res.json())
         .then(json => {
             if(json.code === 0){
@@ -93,7 +93,7 @@ $(document).ready(() => {
     $('tbody').on('click', '.locked', (e) => {
         var row = $(e.target).closest('tr')
         var id = $(row).data('id')
-        fetch('http://localhost:3000/api/accountInfo/'+id)
+        fetch('/api/accountInfo/'+id)
         .then(res => res.json())
         .then(json => {
             if(json.code === 0){
@@ -145,7 +145,7 @@ $(document).ready(() => {
     $('tbody').on('click', '.wait', (e) => {
         var row = $(e.target).closest('tr')
         var id = $(row).data('id')
-        fetch('http://localhost:3000/api/accountInfo/'+id)
+        fetch('/api/accountInfo/'+id)
         .then(res => res.json())
         .then(json => {
             if(json.code === 0){
@@ -201,7 +201,7 @@ $(document).ready(() => {
     $('tbody').on('click', '.canceled', (e) => {
         var row = $(e.target).closest('tr')
         var id = $(row).data('id')
-        fetch('http://localhost:3000/api/accountInfo/'+id)
+        fetch('/api/accountInfo/'+id)
         .then(res => res.json())
         .then(json => {
             if(json.code === 0){
@@ -271,21 +271,21 @@ $(document).ready(() => {
 
     /* Sự kiện gửi yêu cầu xác minh tài khoản */
     $('#confirm-activated').on('click', ()=> {
-        handleAccount('http://localhost:3000/api/handleActivated/'+usernameAccount)
+        handleAccount('/api/handleActivated/'+usernameAccount)
         $('#confirm-Information-wait').modal('hide')
         $('#handle-activated-dialog').modal('hide')
     })
 
     /* Sự kiện gửi yêu cầu bổ xung thông tin */
     $('#confirm-update').on('click', ()=> {
-        handleAccount('http://localhost:3000/api/handleUpdate/'+usernameAccount)
+        handleAccount('/api/handleUpdate/'+usernameAccount)
         $('#confirm-Information-wait').modal('hide')
         $('#handle-update-dialog').modal('hide')
     })
 
     /* Sự kiện gửi yêu cầu vô hiệu hóa tài khoản */
     $('#confirm-canceled').on('click', ()=> {
-        handleAccount('http://localhost:3000/api/handleCanceled/'+usernameAccount)
+        handleAccount('/api/handleCanceled/'+usernameAccount)
         $('#confirm-Information-wait').modal('hide')
         $('#confirm-Information-activated').modal('hide')
         $('#handle-canceled-dialog').modal('hide')
@@ -293,7 +293,7 @@ $(document).ready(() => {
 
     /* Sự kiện gửi yêu cầu mở khóa tài khoản */
     $('#confirm-unlock').on('click', ()=> {
-        handleAccount('http://localhost:3000/api/handleUnlock/'+usernameAccount)
+        handleAccount('/api/handleUnlock/'+usernameAccount)
         $('#confirm-Information-block').modal('hide')
         $('#handle-unlock-dialog').modal('hide')
     })
@@ -352,6 +352,7 @@ function loadAccount(url) {
         })
 }
 
+/* Xử lý thay đổi trang thái của tài khoản */
 function handleAccount(apiUrl) {
     fetch(apiUrl ,{method: 'POST'})
         .then(res => res.json())

@@ -8,11 +8,13 @@ var bcrypt = require("bcrypt");
 var exphbs = require('express-handlebars')
 var Account = require('./models/account')
 var Card = require('./models/card')
+var MobileCard = require('./models/mobileCard')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var apiRouter = require('./routes/api');
+const mobileCard = require('./models/mobileCard');
 
 var app = express();
 
@@ -31,9 +33,21 @@ app.engine('hbs', exphbs.engine({
       return day + "/" + month + "/" + year;
     },
 
+    /* Format số ngày và giờ */
+    formatDateAndTime: function (date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutes + ' ' + ampm;
+      return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + "  " + strTime;
+    },
+
     /* Format số tiền */
     formatMoney: function (money) {
-      money = money.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+      money = parseInt(money).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
       money = money.replaceAll('.', ',')
       return money.replace('VND', 'đ')
     },
@@ -73,26 +87,45 @@ Account.find((err, accounts) => {
 
 Card.find((err, cards) => {
   if (cards.length) return
-  
+
   new Card({
     id: '111111',
     time: new Date('2022-10-10T00:00:00.000+00:00'),
-    CVV:  '411',
+    CVV: '411',
     note: 'Không giới hạn số lần nạp và số tiền mỗi lần nạp'
   }).save()
 
   new Card({
     id: '222222',
     time: new Date('2022-11-11T00:00:00.000+00:00'),
-    CVV:  '443',
+    CVV: '443',
     note: 'Không giới hạn số lần nạp nhưng chỉ được nạp tối đa 1 triệu/lần'
   }).save()
 
   new Card({
     id: '333333',
     time: new Date('2022-12-12T00:00:00.000+00:00'),
-    CVV:  '577',
+    CVV: '577',
     note: 'Khi nạp bằng thẻ này thì luôn nhận được thông báo là “thẻ hết tiền”'
+  }).save()
+})
+
+MobileCard.find((err, mobileCards) => {
+  if (mobileCards.length) return
+
+  new MobileCard({
+    name: 'Viettel',
+    id: '111111'
+  }).save()
+
+  new MobileCard({
+    name: 'Mobifone',
+    id: '222222'
+  }).save()
+
+  new MobileCard({
+    name: 'Vinaphone',
+    id: '333333'
   }).save()
 })
 
