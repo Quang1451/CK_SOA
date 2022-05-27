@@ -531,9 +531,16 @@ router.post('/otpForgetPassword', function (req, res) {
   var form = new multiparty.Form()
   form.parse(req, function (err, otp) {
     if (err) throw err
-    var { OTP } = otp
-    Account.findOne({ otp: OTP }, (err, account) => {
+    var  {OTP} = otp
+    Account.findOne({ otp: OTP.toString() }, (err, account) => {
       if (err) throw err
+      if (!account){
+        req.session.message = {
+          type: 'danger',
+          msg: 'Mã OTP không chính xác!'
+        }
+        return res.redirect(303, '/otpForgetPassword')
+      }
       var dt = account.otpTime
       dt.setMinutes(dt.getMinutes()+1)
       if (dt <= new Date() ) {
@@ -592,5 +599,8 @@ router.post('/changeForget', check.login, function (req, res) {
   })
 });
 
-
+// GET transaction History //
+router.get('/transactionHistory', check.login, function (req, res) {
+  res.render('transactionHistory');
+});
 module.exports = router;
