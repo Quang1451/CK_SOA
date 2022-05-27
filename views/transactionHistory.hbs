@@ -26,7 +26,7 @@
                                             <th scope="col">Loại giao dịch</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="table-history-1">
                                         <tr scope="row">
                                             <td>1</td>
                                             <td>20/10/2021 12:08:00</td>
@@ -82,7 +82,7 @@
                                             <th scope="col">Trạng thái</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="table-history-2">
                                         <tr scope="row">
                                             <td>1</td>
                                             <td>20/10/2021 12:08:00</td>
@@ -136,7 +136,7 @@
 </div>
 
 <!-- Information-wait dialog -->
-<div class="modal fade" id="confirm-Information-wait">
+<div class="modal fade" id="confirm-Information">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -145,7 +145,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id="info-body">
                 <label>Thông tin tài khoản:</label>
                 <p>Tên tài khoản: <span>Nguyễn Văn A</span></p>
                 <p>Số tài khoản: <span>Gồm 13 chữ số</span></p>
@@ -161,8 +161,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Duyệt</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

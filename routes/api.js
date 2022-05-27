@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var check = require('../lib/check.js')
 const Account = require('../models/account');
+const Bill = require('../models/bill')
 
 /* GET api all account. */
 router.get('/allAccount', check.notLogin, check.isAdmin, function(req, res) {
@@ -101,4 +102,34 @@ router.post('/handleUnlock/:username', check.notLogin, check.isAdmin, function(r
         res.json({code: 0})
     })
 });
+
+
+/* GET api get all bills account. */
+router.get('/allBill', check.notLogin, check.isUser, function(req, res) {
+    var account = req.session.account
+    Bill.find({userSend: account.username}, null,{sort: {time: -1}},(err, bills) => {
+        if (err) throw err
+        res.json({code: 0, bills: bills})
+    })
+});
+
+/* GET api get a bill account. */
+router.get('/bill/:id', check.notLogin, check.isUser, function(req, res) {
+    if(!req.params.id)
+        return res.json({code: 1})
+    var id = req.params.id
+    Bill.findOne({_id: id},(err, bill) => {
+        if (err) throw err
+
+        if(bill.type == 'Chuyển tiền') {
+            Account.findOne({username: bill.userReceive}, (err, receiver) => {
+                return res.json({code: 0, bill: bill, receiver: receiver})
+            })
+            return
+        }
+    
+        res.json({code: 0, bill: bill})
+    })
+});
+
 module.exports = router;
