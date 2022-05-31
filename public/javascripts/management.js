@@ -1,12 +1,13 @@
 let urlAccount = '/api/allAccount'
 let usernameAccount
+let bill_id
 $(document).ready(() => {
 
     /* Sự kiện cho trang quản lý tài khoản */
-    /* Tải danh sách tìa khoản khi mới mở trang */
+    /* Tải danh sách taì khoản khi mới mở trang */
     loadAccount(urlAccount)
 
-    /* Lấy danh sách tài khoanar tùy theo trạng thái */
+    /* Lấy danh sách tài khoan tùy theo trạng thái */
     $('#status').on('change', () => {
         switch ($('#status').val()) {
             case 'tk_ChoKichHoat':
@@ -300,17 +301,178 @@ $(document).ready(() => {
 
 
     /* Sự kiện cho trang quản lý các giao dịch */
-
-    /* Hiện dialog xem thông tin chuyển tiền */
-    $('tbody').on('click', '.transfer', (e) => {
-        $('#confirm-transfer').modal('show')
+    getListBill()
+    /* Load danh sách giao dịch đang chờ duyệt */
+    $('tbody').on('click', 'tr',(e) => {
+        var row = $(e.target).closest('tr')
+        var id = $(row).data('id')
+        bill_id = id
+        fetch('/api/bill/'+id)
+        .then(res => res.json())
+        .then(json => {
+            if(json.code == 0) {
+                var bill = json.bill
+                var content
+                fetch('/api/accountName/'+bill.userSend)
+                .then(res => res.json())
+                .then(json1 => {
+                    if (json1.code == 0) {
+                        var accountName = json1.accountName
+                    }
+                    switch (bill.type) {
+                        case 'Chuyển tiền':
+                            var receiver = json.receiver
+                            content = `
+                        <div class="form-group row mb-0">
+                            <p class="col-md-6"><strong>Tài khoản gửi: </strong>${bill.userSend}</p>
+                            <p class="col-md-6"><strong>Người gửi: </strong>${accountName}</p>
+                        </div>
+        
+                        <div class="form-group row mb-0">
+                            <p class="col-md-6"><strong>Tài khoản nhận: </strong>${receiver.username}</p>
+                            <p class="col-md-6"><strong>Người nhận: </strong>${receiver.name}</p>
+                        </div>
+                        
+                        <div class="form-group row mb-0">
+                            <p class="col-md-6"><strong>Số tiền: </strong>${formatMoney(bill.money)}</p>
+                            <p class="col-md-6"><strong>Thời gian: </strong>${formatDateAndTime(bill.time)}</p>
+                        </div>
+        
+                        <div class="form-group row mb-0">
+                            <p class="col-md-6"><strong>Trạng thái: </strong><span class="text-primary">${bill.verify}</span></p>
+                        </div>
+                                        
+                        <div class="form-group mb-0">
+                            <p><strong>Nội dung:
+                                </strong>${JSON.parse(bill.content).note}</p>
+                        </div>`
+                            $('#confirm-transfer-modal').empty()
+                            $('#confirm-transfer-modal').append(content)
+                            $('#confirm-transfer').modal('show')
+                            break;
+                        case 'Rút tiền':
+                            content = `
+                                <div class="form-group row mb-0">
+                                    <p class="col-md-6"><strong>Mã tài khoản: </strong>${bill.userSend}</p>
+                                    <p class="col-md-6"><strong>Họ và tên: </strong>${accountName}</p>
+                                </div>
+                
+                                <div class="form-group row mb-0">
+                                    <p class="col-md-6"><strong>Mã giao dịch: </strong>${bill._id}</p>
+                                    <p class="col-md-6"><strong>Số tiền: </strong>${formatMoney(bill.money)}</p>
+                                </div>
+                
+                                <div class="form-group row mb-0">
+                                    <p class="col-md-6"><strong>Thời gian: </strong>${formatDateAndTime(bill.time)}</p>
+                                    <p class="col-md-6"><strong>Trạng thái: </strong>${bill.verify}</p>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <p><strong>Ghi chú:
+                                    </strong>${bill.content}</p>
+                                </div>`
+                            $('#confirm-withdraw-modal').empty()
+                            $('#confirm-withdraw-modal').append(content)
+                            $('#confirm-withdraw').modal('show')
+                            break;
+                    }
+                
+                })
+            }
+        })
     })
 
-    /* Hiện dialog xem thông tin rút tiền */
-    $('tbody').on('click', '.withdraw', (e) => {
-        $('#confirm-withdraw').modal('show')
+    /* Hiện dialog xác nhận duyệt giao dịch */
+    $('#bill-approve').on('click', ()=> {
+        $('#confirm-dialog').modal('show')
+    })
+    /* Duyệt giao dịch */
+    $('#confirm-dialog-confirmed').on('click', ()=> {
+        fetch('/api/appr/'+bill_id ,{method: 'POST'})
+        .then(res => res.json())
+        .then(json => {
+        })
+        $('#confirm-dialog').modal('hide')
+        $('#confirm-withdraw').modal('hide')
+        $('#confirm-transfer').modal('hide')
+        getListBill()
+    })
+
+    /* Hiện dialog xác nhận từ chối giao dịch */
+    $('#bill-reject').on('click', ()=> {
+        $('#reject-dialog').modal('show')
+    })
+    /* Từ chối giao dịch */
+    $('#reject-dialog-confirmed').on('click', ()=> {
+        fetch('/api/rej/'+bill_id ,{method: 'POST'})
+        .then(res => res.json())
+        .then(json => {
+
+        })
+        $('#reject-dialog').modal('hide')
+        $('#confirm-withdraw').modal('hide')
+        $('#confirm-transfer').modal('hide')
+        getListBill()
     })
 })
+    function getListBill() {
+        fetch('/api/listBill')
+            .then(res => res.json())
+            .then(json => {
+                if (json.code == 0) {
+                    var bills = json.bills
+                    var table = $('#table-bill')
+                    table.empty()
+                    var stt = 1
+                    bills.forEach(bill => {
+                        var content
+                        var color
+                        switch (bill.type) {
+                            case 'Mua thẻ':
+                                content = 'Mua thẻ ' + JSON.parse(bill.content).type
+                                break;
+                            case 'Nạp tiền':
+                                content = ''
+                                break;
+                            case 'Rút tiền':
+                                content = bill.content
+                                break;
+                            case 'Chuyển tiền':
+                                content = JSON.parse(bill.content).note
+                                break;
+                        }
+
+                        switch (bill.verify) {
+                            case 'Đã duyệt':
+                                color = 'green'
+                                break;
+                            case 'Đang chờ':
+                                color = 'yellow'
+                                break;
+                            case 'Bị hủy':
+                                color = 'red'
+                                break;
+                        }
+                        fetch('/api/accountName/'+bill.userSend)
+                            .then(res => res.json())
+                            .then(json1 => {
+                                if (json1.code == 0) {
+                                    var accountName = json1.accountName
+                                    $(table).append(`<tr data-id="${bill._id}" scope="row">
+                                        <td>${stt}</td>
+                                        <td>${bill.userSend}</td>
+                                        <td>${accountName}</td>
+                                        <td><i class="fa fa-money"></i>${formatMoney(bill.money)}</td>                                 
+                                        <td>${bill.type}</td>
+                                        <td style="color: ${color}; font-weight: bold;"><span class="no">${bill.verify}</span></td>
+                                        <td>${formatDateAndTime(bill.time)}</td>
+                                    </tr>`)
+                                    stt += 1
+                                }
+                            })
+                    })
+                }
+            })
+        }
 
 /* Lấy tất cả tài khoản theo từng trạng thái */
 function loadAccount(url) {
@@ -375,4 +537,16 @@ function formatMoney(money) {
     money = money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
     money = money.replaceAll('.',',')
     return money.replace('VND','đ')
+}
+/* Format số ngày và giờ */
+function formatDateAndTime(datetime) {
+    var date = new Date(datetime)
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + "  " + strTime;
 }

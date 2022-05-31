@@ -7,7 +7,7 @@ var sendMail = require('../lib/sendMail')
 const Account = require('../models/account')
 const Card = require('../models/card')
 const Bill = require('../models/bill');
-const bill = require('../models/bill');
+//const bill = require('../models/bill');
 
 /* GET users buy Card page. */
 router.get('/buyCard', check.notLogin, check.isUser, function (req, res) {

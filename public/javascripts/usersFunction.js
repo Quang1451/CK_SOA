@@ -18,7 +18,7 @@ $(document).ready(() => {
     })
 
     /* Các chức năng cho trang nạp thẻ */
-    /* Kiểm tra số thẻ lớn hơn 5 hay nhở hơn 1 hay không */
+    /* Kiểm tra số thẻ lớn hơn 5 hay nhỏ hơn 1 hay không */
     $('#count').on('change', (e) => {
         var count = e.target
         if (parseInt(count.value) > 5)

@@ -599,8 +599,5 @@ router.post('/changeForget', check.login, function (req, res) {
   })
 });
 
-// GET transaction History //
-router.get('/transactionHistory', check.login, function (req, res) {
-  res.render('transactionHistory');
-});
+
 module.exports = router;
