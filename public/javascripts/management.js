@@ -72,19 +72,7 @@ $(document).ready(() => {
                                             style="width: 100%; height: 300px;" alt="back-image">
                                     </div>
                                 </div>
-                                <p><span class="text-danger">Hiển thị lịch sử giao dịch trong tháng hiện hành, mới nhất trước.</span></p>
-                                <div class="form-group row mb-0">
-                                    <p class="col-md-6"><strong>Tài khoản: </strong>00000000</p>
-                                    <p class="col-md-6"><strong>Tên người nhận: </strong>Nguyễn Văn A</p>
-                                </div>
-                                
-                                <div class="form-group row mb-0">
-                                    <p class="col-md-6"><strong>Số tiền: </strong>00000000</p>
-                                    <p class="col-md-6"><strong>Thời gian: </strong>Nguyễn Văn A</p>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <p><strong>Nội dung: </strong>Gui tien viet web cuoi ky</p>
-                                </div>`)
+                                `)
                 $('#confirm-Information-activated').modal('show')
             }
         })
@@ -277,7 +265,7 @@ $(document).ready(() => {
         $('#handle-activated-dialog').modal('hide')
     })
 
-    /* Sự kiện gửi yêu cầu bổ xung thông tin */
+    /* Sự kiện gửi yêu cầu bổ sung thông tin */
     $('#confirm-update').on('click', ()=> {
         handleAccount('/api/handleUpdate/'+usernameAccount)
         $('#confirm-Information-wait').modal('hide')
@@ -303,7 +291,7 @@ $(document).ready(() => {
     /* Sự kiện cho trang quản lý các giao dịch */
     getListBill()
     /* Load danh sách giao dịch đang chờ duyệt */
-    $('tbody').on('click', 'tr',(e) => {
+    /*$('tbody').on('click', 'tr',(e) => {
         var row = $(e.target).closest('tr')
         var id = $(row).data('id')
         bill_id = id
@@ -379,7 +367,7 @@ $(document).ready(() => {
                 })
             }
         })
-    })
+    })*/
 
     /* Hiện dialog xác nhận duyệt giao dịch */
     $('#bill-approve').on('click', ()=> {
@@ -414,7 +402,7 @@ $(document).ready(() => {
         getListBill()
     })
 })
-    function getListBill() {
+    /*function getListBill() {
         fetch('/api/listBill')
             .then(res => res.json())
             .then(json => {
@@ -472,7 +460,7 @@ $(document).ready(() => {
                     })
                 }
             })
-        }
+        }*/
 
 /* Lấy tất cả tài khoản theo từng trạng thái */
 function loadAccount(url) {

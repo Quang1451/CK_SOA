@@ -14,12 +14,12 @@ router.get('/managementAccount', check.notLogin, check.isAdmin ,function(req, re
 });
 
 /* GET management transaction page */
-router.get('/managementTransaction', check.notLogin, check.isAdmin ,function(req, res) {
+/*router.get('/managementTransaction', check.notLogin, check.isAdmin ,function(req, res) {
     content = {
       layout: 'admin.hbs',
       title: 'Quản lý các giao dịch',
     }
     res.render('managementTransaction', content)
-});
+});*/
 
 module.exports = router;

@@ -6,7 +6,7 @@ $(document).ready(() => {
     })
 
     /* Các chức năng cho trang rút tiền */
-    /* Kiểm tra số tiền nhập khi rút tiền có thấp hơn 50000 hay có phải là bối số của 50000 hay không */
+    /* Kiểm tra số tiền nhập khi rút tiền có thấp hơn 50000 hay có phải là bội số của 50000 hay không */
     $('.minMoney').on('change', (e) => {
         var minMoney = e.target
         if (parseInt(minMoney.value) < 50000)

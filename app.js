@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var logger = require('morgan');
-var bcryptjs = require("bcryptjs");
+var bcrypt = require("bcrypt");
 var exphbs = require('express-handlebars')
 var Account = require('./models/account')
 var Card = require('./models/card')
@@ -71,7 +71,7 @@ app.use(session({ secret: 'secret' }))
 Account.find((err, accounts) => {
   if (accounts.length) return
 
-  const hashpasssword = bcryptjs.hashSync('123456', 10);
+  const hashpasssword = bcrypt.hashSync('123456', 10);
   new Account({
     phonneNumber: '0000000000',
     email: 'admin@gmail.com',

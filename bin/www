@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 /**
 * Kết nối MongoDB.
 */
-mongoose.connect('mongodb+srv://quang:quang1405@ck.v03p2ny.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb://127.0.0.1:27017/CK', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log("Kết nối MongoDB thành công!"))
