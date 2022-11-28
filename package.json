@@ -20,6 +20,10 @@
     "multiparty": "^4.2.3",
     "nodemailer": "^6.7.5",
     "nodemon": "^2.0.16",
-    "otp-generator": "^4.0.0"
+    "otp-generator": "^4.0.0",
+    "swagger-ui-express": "^4.6.0"
+  },
+  "engines": {
+    "node": "v16.13.2"
   }
 }
