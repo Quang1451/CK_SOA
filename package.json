@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -24,6 +24,6 @@
     "swagger-ui-express": "^4.6.0"
   },
   "engines": {
-    "node": "v16.13.2"
+    "node": "16.x"
   }
 }
